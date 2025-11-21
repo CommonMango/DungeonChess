@@ -10,7 +10,7 @@ public abstract class Unit : MonoBehaviour
     //▼ 사용 가능한 스킬 리스트
     protected Skill[] useSkill;
     //▼ 유닛의 데이터를 담은 SO  
-    protected UnitData unitData;
+    [SerializeField] protected UnitData unitData;
     //▼최대 체력
     protected float unitMaxHp;
     //▼현재 체력

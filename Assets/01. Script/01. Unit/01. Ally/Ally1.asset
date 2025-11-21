@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d8906f277a93c0a4b9d301c5490ffe91, type: 3}
-  m_Name: Ally
+  m_Name: Ally1
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
-  unitName: 
-  unitMaxHp: 0
-  maxMoveSpeed: 0
-  interactRange: 0
+  unitName: "\uC544\uAD70 "
+  unitMaxHp: 100
+  maxMoveSpeed: 5
+  interactRange: 10
   maxBaseAttackPower: 0
   useSkill: []
   gameObject: {fileID: 0}

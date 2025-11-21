@@ -12,3 +12,4 @@ public enum UnitState
     Move,
     Battle
 }
+
