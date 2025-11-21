@@ -79,6 +79,10 @@ crashlytics-build.properties
 /[Aa]ssets/[Dd]ownloded Assets/Character.meta
 /[Aa]ssets/[Dd]ownloded Assets/TileMap/*
 /[Aa]ssets/[Dd]ownloded Assets/TileMap.meta
-/[Aa]ssets/[Dd]ownloded Assets/etc/*
-/[Aa]ssets/[Dd]ownloded Assets/etc.meta
+/[Aa]ssets/[Dd]ownloded Assets/Etc/*
+/[Aa]ssets/[Dd]ownloded Assets/Etc.meta
+/[Aa]ssets/[Dd]ownloded Assets/BaseFile/*
+/[Aa]ssets/[Dd]ownloded Assets/BaseFile.meta
+
+
 
