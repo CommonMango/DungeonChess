@@ -75,14 +75,15 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 
 # Downloded Assets
-/[Aa]ssets/03. [Dd]ownloded Assets/01. BaseFile/*
-/[Aa]ssets/03. [Dd]ownloded Assets/01. BaseFile.meta
-/[Aa]ssets/03. [Dd]ownloded Assets/02. Character/*
-/[Aa]ssets/03. [Dd]ownloded Assets/02. Character.meta
-/[Aa]ssets/03. [Dd]ownloded Assets/03. TileMap/*
-/[Aa]ssets/03. [Dd]ownloded Assets/03. TileMap.meta
-/[Aa]ssets/03. [Dd]ownloded Assets/04. Etc/*
-/[Aa]ssets/03. [Dd]ownloded Assets/04. Etc.meta
+/[Aa]ssets/03. [Dd]ownloaded Assets/01. BaseFile/*
+/[Aa]ssets/03. [Dd]ownloaded Assets/01. BaseFile.meta
+/[Aa]ssets/03. [Dd]ownloaded Assets/02. Character/*
+/[Aa]ssets/03. [Dd]ownloaded Assets/02. Character.meta
+/[Aa]ssets/03. [Dd]ownloaded Assets/03. TileMap/*
+/[Aa]ssets/03. [Dd]ownloaded Assets/03. TileMap.meta
+/[Aa]ssets/03. [Dd]ownloaded Assets/04. Etc/*
+/[Aa]ssets/03. [Dd]ownloaded Assets/04. Etc.meta
+
 
 
 
