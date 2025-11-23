@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Nodes:
   - rid: 1190073379051012294
   - rid: 1190073379051012304
-  m_VersionTimestamp: 638993166487176226
+  m_VersionTimestamp: 638995076002399194
   m_SerializedVersion: 1
   m_DebugInfo: {fileID: 7422421903094023211}
   m_RuntimeGraph: {fileID: 5582857365038040851}
@@ -83,8 +83,7 @@ MonoBehaviour:
   m_Blackboards: []
   m_MainBlackboardAuthoringAsset: {fileID: 7587614756382763220}
   m_CommandBuffer:
-    m_Commands:
-    - rid: 1190073379051012312
+    m_Commands: []
   m_SubgraphsInfo: []
   m_BlackboardMissingManagedRef: 0
   m_GraphMissingManagedRef: 0
@@ -158,11 +157,6 @@ MonoBehaviour:
         m_NodeModel:
           rid: 1190073379051012304
         m_Connections: []
-    - rid: 1190073379051012312
-      type: {class: CreateNodeFromSerializedTypeCommand, ns: Unity.Behavior, asm: Unity.Behavior.Authoring}
-      data:
-        NodeTypeName: DetectEnemyAction
-        Position: {x: 126.73337, y: 250.19998}
 --- !u!114 &5582857365038040851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -195,14 +189,14 @@ MonoBehaviour:
           rid: 1190073379051012297
         BlackboardGroupReferences: []
         Root:
-          rid: 1190073379051012314
+          rid: 1190073428134330451
         m_ActiveNodes: []
         m_NodesToTick: []
         m_NodesToEnd:
           rid: 1190073379051012299
         m_EndedNodes:
           rid: 1190073379051012300
-        m_VersionTimestamp: 638993166487176226
+        m_VersionTimestamp: 638995076002399194
     - rid: 1190073379051012297
       type: {class: BlackboardReference, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -219,8 +213,8 @@ MonoBehaviour:
       type: {class: Blackboard, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         m_Variables:
-        - rid: 1190073379051012316
-    - rid: 1190073379051012314
+        - rid: 1190073428134330453
+    - rid: 1190073428134330451
       type: {class: Start, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -231,10 +225,10 @@ MonoBehaviour:
         m_Parent:
           rid: -2
         m_Child:
-          rid: 1190073379051012315
+          rid: 1190073428134330452
         Repeat: 1
         AllowMultipleRepeatsPerTick: 0
-    - rid: 1190073379051012315
+    - rid: 1190073428134330452
       type: {class: SelectorComposite, ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         ID:
@@ -243,9 +237,9 @@ MonoBehaviour:
         Graph:
           rid: 1190073379051012296
         m_Parent:
-          rid: 1190073379051012314
+          rid: 1190073428134330451
         m_Children: []
-    - rid: 1190073379051012316
+    - rid: 1190073428134330453
       type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
         GUID:

@@ -1,16 +1,15 @@
 using UnityEngine;
 
-
-public abstract class Unit : MonoBehaviour
+public class Unit : MonoBehaviour
 {
+    //▼ 유닛의 데이터를 담은 SO  
+    [SerializeField] protected UnitData unitData;
     //▼ 이름 
     protected string unitName; 
     //▼ 행동 범위
     protected float interactRange;  
     //▼ 사용 가능한 스킬 리스트
     protected Skill[] useSkill;
-    //▼ 유닛의 데이터를 담은 SO  
-    [SerializeField] protected UnitData unitData;
     //▼최대 체력
     protected float unitMaxHp;
     //▼현재 체력
@@ -28,7 +27,7 @@ public abstract class Unit : MonoBehaviour
     //▼ 타깃 위치
     protected Vector2 targetPosition;
 
-    protected virtual void Awake()
+    protected void Awake()
     {
         unitName = unitData.unitName;
         unitMaxHp = unitData.unitMaxHp;
@@ -36,14 +35,6 @@ public abstract class Unit : MonoBehaviour
         unitMaxmoveSpeed = unitData.maxMoveSpeed;
         interactRange = unitData.interactRange;
     }
-
-    /// <summary>
-    /// 공격 메서드들 
-    /// </summary>
-    protected abstract void BaseAttack();
-
-    protected abstract void skillAttack();
-    
 
     /// <summary>
     /// 일시적으로 스텟을 바꿔주는 메서드 
