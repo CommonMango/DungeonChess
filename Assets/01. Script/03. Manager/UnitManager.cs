@@ -1,16 +1,19 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class UnitManager : SingleTon<UnitManager>
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+   [SerializeField] private List<Unit> AllyUnits;
+   [SerializeField] private List<Unit> EnemyUnits;
+
+    public void AddAlly(Unit ally) => AllyUnits.Add(ally);
+    public void RmvAlly(Unit ally) => AllyUnits.Remove(ally); 
+    public void AddEnemy(Unit enemy) => EnemyUnits.Add(enemy); 
+    public void RmvEnemy(Unit enemy) => AllyUnits.Add(enemy);
+
+    void Awake()
     {
-        
+        SingletonInit();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

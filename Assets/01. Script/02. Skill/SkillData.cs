@@ -5,6 +5,6 @@ public class Skill : ScriptableObject
 {
     public string Skillname; //이름 
     public string SkillDescription; //설명
-    public float skillDamage; //데미지 
-    public float skillCoolTime; //쿨타임 
+    public float skillDamage; //데미지
+         
 }

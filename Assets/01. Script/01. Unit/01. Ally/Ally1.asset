@@ -16,5 +16,10 @@ MonoBehaviour:
   unitMaxHp: 100
   maxMoveSpeed: 5
   interactRange: 10
-  maxBaseAttackPower: 0
+  maxBaseAttackPower: 10
   useSkill: []
+  unitMaxSP: 100
+  unitMaxAttackSpeed: 5
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64

@@ -1,82 +1,136 @@
+using System.Collections;
+using Unity.Behavior;
 using UnityEngine;
 
-public class Unit : MonoBehaviour
+public abstract partial class Unit : MonoBehaviour
 {
+    //▼ 사용 가능한 스킬 리스트
+    private Skill[] useSkill;
+    //▼ 행동트리 관리용 
+    [SerializeField] protected BehaviorGraphAgent BTree;
     //▼ 유닛의 데이터를 담은 SO  
     [SerializeField] protected UnitData unitData;
-    //▼ 이름 
-    protected string unitName; 
-    //▼ 행동 범위
+
+    //▼ 스텟을 담은 클래스 
+    protected UnitStats unitStats;
+    public UnitStats Stats => unitStats;
+    //▼ 감지 범위
+    protected float detectRange; 
+    
+    //▼상호작용 범위
     protected float interactRange;  
-    //▼ 사용 가능한 스킬 리스트
-    protected Skill[] useSkill;
-    //▼최대 체력
-    protected float unitMaxHp;
-    //▼현재 체력
-    protected float unitCurHp;
-    //▼ 최대 공격력 
-    protected float maxBaseAttackPower;
-    //▼ 현재 공격력 
-    protected float curBaseAttackPower;
-    //▼ 최대 이동속도
-    protected float unitMaxmoveSpeed; 
-    //▼ 현재 이동속도
-    protected float unitCurmoveSpeed; 
-    //▼ 현재 유닛 상태 
-    protected UnitState currentState;
-    //▼ 타깃 위치
+    
+    //▼ 감지 코루틴 변수
+    protected Coroutine detcoroutine;
+    //▼ 타깃 위치 변수와 프로퍼티 
     protected Vector2 targetPosition;
-
-    protected void Awake()
+    public Vector2 TargetPosition => targetPosition;
+    //▼ 감지된 콜라이더 배열
+    [SerializeField]protected Collider2D[] colliders;
+    //▼ 타깃 레이어 
+    protected LayerMask targetLayerMask;
+    //▼ 전투 시작 전달용 변수
+    protected bool isBattlePhaseStart;
+    public bool IsBattlePhaseStart => isBattlePhaseStart;
+    //▼ 타겟 감지 여부 전달용 변수
+    protected bool isTargetInInteractRange;
+    public bool IsTargetInInteractRange => isTargetInInteractRange;
+    //▼ SP활성화 여부 전달용 변수
+    protected bool isSPFull;
+    public bool IsSPFull => isSPFull;
+   
+    protected virtual void Awake()
     {
-        unitName = unitData.unitName;
-        unitMaxHp = unitData.unitMaxHp;
-        maxBaseAttackPower = unitData.maxBaseAttackPower;
-        unitMaxmoveSpeed = unitData.maxMoveSpeed;
+        useSkill = (Skill[])unitData.useSkill.Clone();
+        unitStats = new UnitStats(unitData); 
+        detectRange = 50f;
         interactRange = unitData.interactRange;
+        targetLayerMask = unitData.targetLayer;
+        
     }
+  
+    public abstract void BaseAttack();// 기본 공격
+    public abstract void SkillAttack();// 스킬 공격
 
     /// <summary>
-    /// 일시적으로 스텟을 바꿔주는 메서드 
+    /// 가장 가까운 콜라이더 찾는 메서드
     /// </summary>
-    /// <param name="changeStat"> 바꿀 스텟</param>
-    /// <param name="changeAmount"> 변경될 양</param>
-    public void ChangeBattleStat(statType changeStat, float changeAmount)
+    /// <param name="colliders">감지할 콜라이더 배열</param>
+    /// <returns></returns>
+    protected Collider2D FindNearestCollider(Collider2D[] colliders)
     {
-        switch (changeStat)
+        float minDistance = float.MaxValue;
+        float distance;
+        Collider2D minCol = null;
+
+        foreach(var col in colliders)
         {
-            case statType.moveSpeed:
-                unitCurmoveSpeed += changeAmount;
-                break;
-            case statType.baseAttackPower:
-                curBaseAttackPower += changeAmount;
-                break;
-            case statType.HP:
-                unitCurHp += changeAmount;
-                break;
+            distance = (col.transform.position - transform.position).sqrMagnitude;
+           
+            if (distance < minDistance)
+            {
+                minCol = col; 
+                minDistance = distance;     
+            }
         }
+        return minCol;
     }
 
-    /// <summary>
-    /// 영구적으로 스텟을 바꿔주는 메서드 
-    /// </summary>
-    /// <param name="changeStat"> 바꿀 스텟</param>
-    /// <param name="changeAmount">변경될 양</param>
-    public void UpgradeState(statType changeStat, float changeAmount)
+    public void SetTarget(Vector2 target)
     {
-         switch (changeStat)
-        {
-            case statType.moveSpeed:
-                unitMaxmoveSpeed += changeAmount;
-                break;
-            case statType.baseAttackPower:
-                maxBaseAttackPower += changeAmount;
-                break;
-            case statType.HP:
-                unitMaxHp += changeAmount;
-                break;
-        }
+        targetPosition = target;
     }
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, detectRange);
+    }
+    /// <summary>
+    /// 타깃 감지용 코루틴 함수
+    /// </summary>
+    /// <returns></returns>
+    protected virtual IEnumerator DetectTarget()
+    {
+        float detectDelay = 1f;
+        WaitForSeconds wfs = new WaitForSeconds(detectDelay);
+        while (true)
+        {
+            colliders = Physics2D.OverlapCircleAll
+            (  
+                transform.position, 
+                detectRange, 
+                targetLayerMask
+            );
+
+            Collider2D near;
+            float nearDistance;
+            float magnitinteractRange;
+            if(colliders.Length > 0)
+            {
+                near = FindNearestCollider(colliders);
+                nearDistance = (near.transform.position - transform.position).sqrMagnitude;
+                 magnitinteractRange = interactRange * interactRange;
+
+                if (nearDistance <= magnitinteractRange && isTargetInInteractRange == false)
+                {
+                    isTargetInInteractRange = true;
+                    targetPosition = near.transform.position; 
+                }
+    
+                else if (nearDistance > magnitinteractRange && isTargetInInteractRange == true)
+                {
+                    isTargetInInteractRange = false;
+                }
+            }
+            else
+            {
+                isTargetInInteractRange = false;
+                
+            }
+            
+            yield return wfs;
+        }       
+    }    
 }
 
 
