@@ -1,6 +1,7 @@
 using System.Collections;
 using Unity.Behavior;
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract partial class Unit : MonoBehaviour
 {
@@ -10,10 +11,7 @@ public abstract partial class Unit : MonoBehaviour
     [SerializeField] protected BehaviorGraphAgent BTree;
     //▼ 유닛의 데이터를 담은 SO  
     [SerializeField] protected UnitData unitData;
-
-    //▼ 스텟을 담은 클래스 
-    protected UnitStats unitStats;
-    public UnitStats Stats => unitStats;
+    
     //▼ 감지 범위
     protected float detectRange; 
     
@@ -38,17 +36,22 @@ public abstract partial class Unit : MonoBehaviour
     //▼ SP활성화 여부 전달용 변수
     protected bool isSPFull;
     public bool IsSPFull => isSPFull;
-   
+    
     protected virtual void Awake()
     {
+        UnitInit();
+        InitMaxStat();
+    }
+    
+    protected void UnitInit()
+    {
         useSkill = (Skill[])unitData.useSkill.Clone();
-        unitStats = new UnitStats(unitData); 
         detectRange = 50f;
         interactRange = unitData.interactRange;
         targetLayerMask = unitData.targetLayer;
-        
-    }
-  
+    } 
+
+
     public abstract void BaseAttack();// 기본 공격
     public abstract void SkillAttack();// 스킬 공격
 
@@ -105,28 +108,35 @@ public abstract partial class Unit : MonoBehaviour
             Collider2D near;
             float nearDistance;
             float magnitinteractRange;
+
             if(colliders.Length > 0)
             {
                 near = FindNearestCollider(colliders);
                 nearDistance = (near.transform.position - transform.position).sqrMagnitude;
-                 magnitinteractRange = interactRange * interactRange;
+                magnitinteractRange = interactRange * interactRange;
+                targetPosition = near.transform.position;
 
                 if (nearDistance <= magnitinteractRange && isTargetInInteractRange == false)
                 {
                     isTargetInInteractRange = true;
+                    BTree.SetVariableValue<bool>("IsTargetDetected",isTargetInInteractRange);
                     targetPosition = near.transform.position; 
                 }
     
                 else if (nearDistance > magnitinteractRange && isTargetInInteractRange == true)
                 {
                     isTargetInInteractRange = false;
+                    BTree.SetVariableValue<bool>("IsTargetDetected",isTargetInInteractRange);
+                   
                 }
             }
             else
             {
                 isTargetInInteractRange = false;
-                
+                BTree.SetVariableValue<bool>("IsTargetDetected",false);
             }
+           
+           
             
             yield return wfs;
         }       

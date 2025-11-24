@@ -11,7 +11,7 @@ public enum statType
     SP
 }
 
-public class UnitStats
+public abstract partial class Unit
 {
     //▼ 이름 
     private string unitName; 
@@ -42,21 +42,20 @@ public class UnitStats
     //▼ 현재 공격속도
     private float curAttackSpeed; 
     public float AttackSpeed => curAttackSpeed;
-
-    public UnitStats(UnitData unitData)
+    
+    private void Start() 
     {
-        unitName = unitData.unitName;
-        maxHp = unitData.unitMaxHp;
-        maxSP = unitData.unitMaxSP;
-        maxAttackSpeed = unitData.unitMaxAttackSpeed;
-        maxBaseAttackPower = unitData.maxBaseAttackPower;
-        maxmoveSpeed = unitData.maxMoveSpeed;
-        startSP = 0;
+        InitCurStat();  
     }
     
-     private void Start() 
+    private void InitMaxStat()
     {
-        InitAllStat();  
+        maxmoveSpeed = unitData.maxMoveSpeed;
+        maxAttackSpeed = unitData.unitMaxAttackSpeed;
+        maxBaseAttackPower = unitData.maxBaseAttackPower;
+        maxHp = unitData.unitMaxHp;
+        maxSP = unitData.unitMaxSP;
+        name = unitData.unitName;
     }
     
     /// <summary>
@@ -116,7 +115,7 @@ public class UnitStats
         }
     }
 
-    public void InitAllStat()
+    public void InitCurStat()
     {
         curAttackSpeed = maxAttackSpeed;
         curBaseAttackPower = maxBaseAttackPower;

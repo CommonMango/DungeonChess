@@ -16,15 +16,16 @@ public partial class MoveToTargetAction : Action
     
     protected override Status OnStart()
     {
-        targetdirection.Value = meleeAttacker.Value.TargetPosition.normalized;
+        targetdirection.Value = (meleeAttacker.Value.TargetPosition - (Vector2)Self.Value.transform.position).normalized;
+        
         return Status.Running;
     }
 
     protected override Status OnUpdate()
     { 
-        Rigid.Value.MovePosition
-        (Rigid.Value.position + targetdirection.Value * meleeAttacker.Value.Stats.MoveSpeed * Time.deltaTime);
-
+        Rigid.Value.position += targetdirection.Value * meleeAttacker.Value.MoveSpeed *Time.deltaTime;
+       
+       
         return Status.Success;
     }
 

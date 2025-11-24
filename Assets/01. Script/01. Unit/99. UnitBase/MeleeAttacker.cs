@@ -5,7 +5,6 @@ public class MeleeAttacker : Unit, IObserveStageChange
 {
     private void OnEnable()
     {
-        
         PhaseManager.Instance.AddSubScriber(this);
         if(unitData.isAlly)
         {
@@ -24,18 +23,21 @@ public class MeleeAttacker : Unit, IObserveStageChange
         else
         UnitManager.Instance.RmvEnemy(this);
     }
+    
 
     public void InChangeStageState(PhaseState changeState)
     {
        if(changeState == PhaseState.Battle)
             isBattlePhaseStart = true;
+            BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
             if(detcoroutine == null)
             {
                 StartCoroutine(DetectTarget());
-                Debug.Log("시작함");
+                Debug.Log(MoveSpeed);
             }
         else
             isBattlePhaseStart = false;
+            BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
             if(detcoroutine != null)
                 StopCoroutine(DetectTarget());
     }
