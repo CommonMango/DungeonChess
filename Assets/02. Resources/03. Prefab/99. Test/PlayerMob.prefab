@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 4901347215455346770}
   - component: {fileID: 736425730664526262}
   - component: {fileID: 924128913835517869}
-  - component: {fileID: 7571677330923261070}
   m_Layer: 7
   m_Name: PlayerMob
   m_TagString: Untagged
@@ -110,7 +109,6 @@ MonoBehaviour:
   m_BlackboardVariableOverridesList:
   - rid: 1190073448079294629
   - rid: 1190073448079294630
-  - rid: 1190073448079294631
   - rid: 1190073448079295071
   m_OriginalGraph: {fileID: -7354522781205584821, guid: b405ddf54d305c3428833daf99134898, type: 2}
   m_IsInitialised: 0
@@ -134,14 +132,6 @@ MonoBehaviour:
           m_Value1: 9392059682430684132
         Name: MeleeAttacker
         m_Value: {fileID: 4901347215455346770}
-    - rid: 1190073448079294631
-      type: {class: 'BlackboardVariable`1[[System.Single, mscorlib]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 12305643684276231392
-          m_Value1: 5210411109784292681
-        Name: AttackSpeed
-        m_Value: 5
     - rid: 1190073448079295071
       type: {class: 'BlackboardVariable`1[[UnityEngine.Rigidbody2D, UnityEngine.Physics2DModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
       data:
@@ -229,25 +219,3 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!195 &7571677330923261070
-NavMeshAgent:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8016627339957482905}
-  m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.5
-  m_Speed: 3.5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 120
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 1
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
