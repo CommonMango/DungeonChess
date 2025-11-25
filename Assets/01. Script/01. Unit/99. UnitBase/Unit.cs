@@ -46,7 +46,7 @@ public abstract partial class Unit : MonoBehaviour
     protected void UnitInit()
     {
         useSkill = (Skill[])unitData.useSkill.Clone();
-        detectRange = 50f;
+        detectRange = 10f;
         interactRange = unitData.interactRange;
         targetLayerMask = unitData.targetLayer;
     } 
@@ -82,11 +82,6 @@ public abstract partial class Unit : MonoBehaviour
     public void SetTarget(Vector2 target)
     {
         targetPosition = target;
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, detectRange);
     }
     /// <summary>
     /// 타깃 감지용 코루틴 함수
