@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 public class MeleeAttacker : Unit, IObserveStageChange
 {
     private void OnEnable()
@@ -9,10 +8,14 @@ public class MeleeAttacker : Unit, IObserveStageChange
         if(unitData.isAlly)
         {
             UnitManager.Instance.AddAlly(this);
-            
         }
         else
         UnitManager.Instance.AddEnemy(this);
+    }
+    protected override void Start()
+    {
+        base.Start();
+        SetTarget();
     }
     void OnDisable()
     {
@@ -25,26 +28,25 @@ public class MeleeAttacker : Unit, IObserveStageChange
         UnitManager.Instance.RmvEnemy(this);
     }
     
-
     public void InChangeStageState(PhaseState changeState)
     {
-       if(changeState == PhaseState.Battle)
-            isBattlePhaseStart = true;
-            BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
-            if(detcoroutine == null)
+        if(changeState == PhaseState.Battle)
             {
-                StartCoroutine(DetectTarget());
+                isBattlePhaseStart = true;
+                BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
+                SetTarget();
             }
         else
+        {
             isBattlePhaseStart = false;
             BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
-            if(detcoroutine != null)
-                StopCoroutine(DetectTarget());
+            SetTarget();
+        }
     }
 
     public override void BaseAttack()
     {
-        StopCoroutine(DetectTarget());
+        
         Debug.Log("기본 공격함");
     }
 

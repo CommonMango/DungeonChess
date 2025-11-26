@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 4901347215455346770}
   - component: {fileID: 736425730664526262}
   - component: {fileID: 924128913835517869}
+  - component: {fileID: 7093607851425016010}
   m_Layer: 7
   m_Name: PlayerMob
   m_TagString: Untagged
@@ -155,6 +156,8 @@ MonoBehaviour:
   BTree: {fileID: 361222191170455072}
   unitData: {fileID: 11400000, guid: db762154eb2493e4ba8251593a56d2b8, type: 2}
   colliders: []
+  isMoveReady: 0
+  nextNodeIndex: 0
 --- !u!70 &736425730664526262
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -219,3 +222,15 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &7093607851425016010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8016627339957482905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5cf63372f7ba45a44a2dfffecd2eb96a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DragUnit

@@ -9,12 +9,28 @@ public class UnitManager : SingleTon<UnitManager>
 {
     [SerializeField] private Dictionary<Unit, int> AllyUnits = new();
     [SerializeField] private Dictionary<Unit, int> EnemyUnits = new();
-   
     [SerializeField] private GameObject Ally;
     [SerializeField] private GameObject Enemy;
-    public void RmvAlly(Unit ally) => AllyUnits.Remove(ally); 
-    public void RmvEnemy(Unit enemy) => AllyUnits.Remove(enemy);
+    public void RmvAlly(Unit ally)
+    {
+        PathFinder.Instance.SetPosCost(AllyUnits[ally], 0);
+        AllyUnits.Remove(ally);
+        if(AllyUnits.Count == 0)
+        {
+            PhaseManager.Instance.ChangeState(PhaseState.Lose);
+        }  
+    }    
         
+    public void RmvEnemy(Unit enemy) 
+    {
+        PathFinder.Instance.SetPosCost(EnemyUnits[enemy],0);
+        EnemyUnits.Remove(enemy);
+
+        if(EnemyUnits.Count == 0)
+        {
+            PhaseManager.Instance.ChangeState(PhaseState.Reward);
+        }
+    }   
     void Awake()
     {
         SingletonInit();
@@ -34,11 +50,15 @@ public class UnitManager : SingleTon<UnitManager>
     {
         if(AllyUnits.ContainsKey(unit))
         {
+            PathFinder.Instance.SetPosCost(AllyUnits[unit], 0);
             AllyUnits[unit] = unit.NodeIndex;
+            PathFinder.Instance.SetPosCost(AllyUnits[unit], PathFinder.Instance.ObstacleCost);
         }
         else
         {
+            PathFinder.Instance.SetPosCost(EnemyUnits[unit], 0);
             EnemyUnits[unit] = unit.NodeIndex;
+            PathFinder.Instance.SetPosCost(EnemyUnits[unit], PathFinder.Instance.ObstacleCost);
         }
     } 
 
@@ -61,7 +81,7 @@ public class UnitManager : SingleTon<UnitManager>
                 var targetUnit = PathFinder.Instance.GetTileNodeByIndex(index);
                 distance = (targetUnit.pos - selfUnit.pos).sqrMagnitude; 
                 
-                if(minDistance > distance);
+                if(minDistance > distance)
                 {
                     targetIndex = index; 
                 }
@@ -74,13 +94,12 @@ public class UnitManager : SingleTon<UnitManager>
                 var targetUnit = PathFinder.Instance.GetTileNodeByIndex(index);
                 distance = (targetUnit.pos - selfUnit.pos).sqrMagnitude; 
                 
-                if(minDistance > distance);
+                if(minDistance > distance)
                 {
                     targetIndex = index; 
                 }
             }
         }
         return targetIndex;
-        
     }     
 }

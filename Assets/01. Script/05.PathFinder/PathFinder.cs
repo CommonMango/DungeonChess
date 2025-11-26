@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using JetBrains.Annotations;
 
 public struct TileNode
 {
@@ -50,6 +50,22 @@ public class PathFinder : SingleTon<PathFinder>
             }
         }  
     }
+    
+    /// <summary>
+    /// 다음에 가야할 노드를 찾는 메서드
+    /// </summary>
+    /// <param name="curIndex">움직일 객체의 노드 인덱스</param>
+    /// <param name="targetIndex">가야할 곳의 노드 인덱스</param>
+    /// <returns></returns>
+    public int FindPath(int curIndex, int targetIndex)
+    {
+        List<int>aroundList = GetAroundIndex(curIndex);
+        CalcH(aroundList,targetIndex);
+        int resultIndex = FinalDesNode(aroundList);
+        InitHValue(aroundList);
+        return resultIndex;
+    }
+
 
     //주변 8방향의 Index가져오기 
     public List<int> GetAroundIndex(int curIndex)
@@ -96,8 +112,6 @@ public class PathFinder : SingleTon<PathFinder>
         return vecPosition;
     }
 
-
-
     /// <summary>
     /// Vector2를 통해서 Index받기
     /// /2는 좌표간 간격만큼 나눠준 것
@@ -106,7 +120,6 @@ public class PathFinder : SingleTon<PathFinder>
     /// <returns></returns>
     public int GetIndexByVector2(Vector2 target)
     {
-    
         float width = (maxX - minX + tileGap)/tileGap; 
         float col = (target.x - minX) / tileGap; 
         float row = (maxY - target.y) / tileGap; 
@@ -122,12 +135,24 @@ public class PathFinder : SingleTon<PathFinder>
         return target;
     }
 
-    // 원하는 타일 비용 변경 
+    /// <summary>
+    /// 원하는 타일 비용 변경
+    /// </summary>
+    /// <param name="index">//원하는 타일 인덱스</param>
+    /// <param name="cost">//변경될 비용 </param>
     public void SetPosCost(int index, float cost)
     {
         var temp = standAbleTiles[index];
         temp.cost = cost;
         standAbleTiles[index] = temp;
+    }
+
+    public Vector2 ConvertPositionToCloseNode(Vector2 pos)
+    {
+        float x = Mathf.Round((pos.x - minX) / tileGap) * tileGap + minX;
+        float y = Mathf.Round((pos.x - minY) / tileGap) * tileGap + minY;
+        Vector2 CloseNode = new Vector2(x,y);
+        return CloseNode;
     }
 
     //H값 구하기 
@@ -166,6 +191,18 @@ public class PathFinder : SingleTon<PathFinder>
             }
         }
         return resultIndex; 
+    }
+
+    public void InitHValue(List<int>aroundNode)
+    {
+        foreach(var element in aroundNode)
+        {
+            var temp = standAbleTiles[element];
+            if(temp.distance != 0)
+            {
+                temp.distance = 0;
+            }
+        }
     }
 
 }

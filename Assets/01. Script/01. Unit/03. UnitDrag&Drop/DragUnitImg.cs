@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 
 //유닛을 생성할 이미지에 넣을 클래스 
 public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -11,7 +7,16 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private Transform originalParent;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private GameObject unitPrefab;
-    
+    bool isAllyAvailble = false;
+
+    public void Start()
+    {
+        if(!isAllyAvailble)
+        {
+            SpawnUnit();
+            isAllyAvailble = true;
+        }
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalParent = transform.parent;

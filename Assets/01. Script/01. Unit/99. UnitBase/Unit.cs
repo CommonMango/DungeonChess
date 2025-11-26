@@ -1,7 +1,6 @@
-using System.Collections;
 using Unity.Behavior;
 using UnityEngine;
-using UnityEngine.AI;
+
 
 public abstract partial class Unit : MonoBehaviour
 {
@@ -21,8 +20,8 @@ public abstract partial class Unit : MonoBehaviour
     //▼ 감지 코루틴 변수
     protected Coroutine detcoroutine;
     //▼ 타깃 위치 변수와 프로퍼티 
-    protected Vector2 targetPosition;
-    public Vector2 TargetPosition => targetPosition;
+    protected int targetIndex;
+    public int  TargetIndex => targetIndex;
     //▼ 감지된 콜라이더 배열
     [SerializeField]protected Collider2D[] colliders;
     //▼ 타깃 레이어 
@@ -36,9 +35,15 @@ public abstract partial class Unit : MonoBehaviour
     //▼ SP활성화 여부 전달용 변수
     protected bool isSPFull;
     public bool IsSPFull => isSPFull;
-
+    //▼ 현재 위치의 노드인덱스
     protected int curNodeIndex;
     public int NodeIndex => curNodeIndex;
+
+    //움직일 준비가 되었는지 확인하는 변수 
+    public bool isMoveReady = false; 
+
+    public int nextNodeIndex = 0; 
+
 
     protected virtual void Awake()
     {
@@ -53,95 +58,26 @@ public abstract partial class Unit : MonoBehaviour
         interactRange = unitData.interactRange;
         targetLayerMask = unitData.targetLayer;
         curNodeIndex = PathFinder.Instance.GetIndexByVector2(transform.position);
-        Debug.Log(curNodeIndex);
     }
-
-   
 
     public abstract void BaseAttack();// 기본 공격
     public abstract void SkillAttack();// 스킬 공격
 
-    /// <summary>
-    /// 가장 가까운 콜라이더 찾는 메서드
-    /// </summary>
-    /// <param name="colliders">감지할 콜라이더 배열</param>
-    /// <returns></returns>
-     protected Collider2D FindNearestCollider(Collider2D[] colliders)
-     {
-         float minDistance = float.MaxValue;
-         float distance;
-         Collider2D minCol = null;
-
-        foreach(var col in colliders)
-         {
-             distance = (col.transform.position - transform.position).sqrMagnitude;
-           
-            if (distance < minDistance)
-           {
-                minCol = col; 
-               minDistance = distance;     
-             }
-        }
-        return minCol;
-     }
-     
-    public void SetTarget(Vector2 target)
+    public void SetTarget() //타겟 노드 설정
     {
-        targetPosition = target;
+        targetIndex = UnitManager.Instance.SetTargetIndex(curNodeIndex,unitData.isAlly);
     }
 
-    /// <summary>
-    /// 타깃 감지용 코루틴 함수
-    /// </summary>
-    /// <returns></returns>
-    protected virtual IEnumerator DetectTarget()
+    public void SetCurTile(int changeIndex) //노드 인덱스를 새로 설정 
     {
-        float detectDelay = 1f;
-        WaitForSeconds wfs = new WaitForSeconds(detectDelay);
-        while (true)
+        curNodeIndex = changeIndex;
+        UnitManager.Instance.updateIndex(this);
+        if (PathFinder.Instance.GetAroundIndex(targetIndex).Contains(changeIndex))
         {
-            colliders = Physics2D.OverlapCircleAll
-            (  
-                transform.position, 
-                detectRange, 
-                targetLayerMask
-            );
-
-            Collider2D near;
-            float nearDistance;
-            float magnitinteractRange;
-
-            if(colliders.Length > 0)
-            {
-                near = FindNearestCollider(colliders);
-                nearDistance = (near.transform.position - transform.position).sqrMagnitude;
-                magnitinteractRange = interactRange * interactRange;
-                targetPosition = near.transform.position;
-
-                if (nearDistance <= magnitinteractRange && isTargetInInteractRange == false)
-                {
-                    isTargetInInteractRange = true;
-                    BTree.SetVariableValue<bool>("IsTargetDetected",isTargetInInteractRange);
-                    targetPosition = near.transform.position; 
-                }
+            BTree.SetVariableValue<bool>("IsDetected",true);
+        }
+    }
     
-                else if (nearDistance > magnitinteractRange && isTargetInInteractRange == true)
-                {
-                    isTargetInInteractRange = false;
-                    BTree.SetVariableValue<bool>("IsTargetDetected",isTargetInInteractRange);
-                }
-            }
-            else
-            {
-                isTargetInInteractRange = false;
-                BTree.SetVariableValue<bool>("IsTargetDetected",false);
-            }
-           
-           
-            
-            yield return wfs;
-        }       
-    }    
 }
 
 

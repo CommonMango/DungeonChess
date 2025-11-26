@@ -43,7 +43,7 @@ public abstract partial class Unit
     private float curAttackSpeed; 
     public float AttackSpeed => curAttackSpeed;
     
-    private void Start() 
+    protected virtual void Start() 
     {
         InitCurStat();  
     }

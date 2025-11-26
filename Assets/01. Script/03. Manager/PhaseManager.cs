@@ -1,9 +1,7 @@
-using UnityEngine;
 using System.Collections.Generic;
-
 public enum PhaseState
 {
-    Placement, Battle, Reward
+    Placement, Battle, Reward, Lose
 }
 
 public class PhaseManager : SingleTon<PhaseManager>
@@ -26,8 +24,10 @@ public class PhaseManager : SingleTon<PhaseManager>
     
     void Update()
     {
-        // //한쪽진영의 유닛이 전부 죽었을 때
+        // 적군진영의 유닛이 전부 죽었을 때
         // ChangeState(PhaseState.Reward);
+        //아군 진영의 유닛이 전부 죽었을 떄 
+        //.ChangeState(PhaseState.Lose);
         // //Reward가 종료되면 
         // ChangeState(PhaseState.Placement);
     }
