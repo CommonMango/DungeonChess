@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
+
 public struct TileNode
 {
     public Vector2 pos; // 해당 위치 
@@ -16,14 +17,21 @@ public struct TileNode
     }
 }
 
-public class DefaultTiles : SingleTon<DefaultTiles>
+public class PathFinder : SingleTon<PathFinder>
 {
-    public Dictionary<int , TileNode> standAbleTiles = new(); //갈 수 있는 위치정보와 비용 리스트 테스트용으로 public
-    [SerializeField] int maxX = 11;
-    [SerializeField] int maxY = 21;
-    [SerializeField] int minX = -11;
-    [SerializeField] int minY = -25;
- 
+    private Dictionary<int , TileNode> standAbleTiles = new(); //노드인덱스를 키로 노드정보를 가져오는 딕셔너리 
+    [SerializeField] int maxX = 11; //x최대 좌표 
+    public int MaxX => maxX;
+    [SerializeField] int maxY = 21; //y최대 좌표
+    public int MaxY => maxY;
+    [SerializeField] int minX = -11; //x최소 좌표
+    public int MinX => minX;
+    [SerializeField] int minY = -25; //y최소 좌표
+    public int MinY => minY; 
+    [SerializeField] int startIndex = 1; // 시작 인덱스 
+    [SerializeField] int tileGap = 2; //인접한 타일간 좌표 차이
+    private float obstacleCost = float.MaxValue/2;
+    public float ObstacleCost => obstacleCost;
     void Awake()
     {
         InitTiles();
@@ -32,10 +40,11 @@ public class DefaultTiles : SingleTon<DefaultTiles>
     //Tiles 첫 초기화 
     public void InitTiles()
     {
-        int index = 1;
-        for (int y = minY; y <= maxY; y += 2)
+        int index = startIndex;
+
+        for (int y = maxY; y >= minY; y -= tileGap)
         {
-            for(int x = minX; x <= maxX; x += 2 )
+            for(int x = minX; x <= maxX; x += tileGap )
             {
                 standAbleTiles[index++] = new TileNode(new Vector2(x,y));
             }
@@ -73,7 +82,22 @@ public class DefaultTiles : SingleTon<DefaultTiles>
         }
         return aroundNode;
     }
-    
+    /// <summary>
+    /// 모든 Vector2를 리스트로 가져옴 
+    /// </summary>
+    /// <returns></returns>
+    public List<Vector2> GetAllVector2List()
+    {
+        List<Vector2> vecPosition  = new();
+        foreach(var tiles in standAbleTiles.Values)
+        {
+            vecPosition.Add(tiles.pos);
+        } 
+        return vecPosition;
+    }
+
+
+
     /// <summary>
     /// Vector2를 통해서 Index받기
     /// /2는 좌표간 간격만큼 나눠준 것
@@ -83,12 +107,19 @@ public class DefaultTiles : SingleTon<DefaultTiles>
     public int GetIndexByVector2(Vector2 target)
     {
     
-        float width = (maxX - minX + 2)/2; 
-        float col = (target.x - minX) / 2; 
-        float row = (maxY - target.y) / 2; 
-        float index = row * width + col + 1;
+        float width = (maxX - minX + tileGap)/tileGap; 
+        float col = (target.x - minX) / tileGap; 
+        float row = (maxY - target.y) / tileGap; 
+        float index = row * width + col + startIndex;
         
         return (int)index;
+    }
+
+    //원하는 타일의 비용을 가져옴 
+    public TileNode GetTileNodeByIndex(int index)
+    {
+        var target = standAbleTiles[index];
+        return target;
     }
 
     // 원하는 타일 비용 변경 

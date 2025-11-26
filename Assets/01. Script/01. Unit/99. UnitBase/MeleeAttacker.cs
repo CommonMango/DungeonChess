@@ -8,7 +8,8 @@ public class MeleeAttacker : Unit, IObserveStageChange
         PhaseManager.Instance.AddSubScriber(this);
         if(unitData.isAlly)
         {
-            UnitManager.Instance.AddAlly(this);   
+            UnitManager.Instance.AddAlly(this);
+            
         }
         else
         UnitManager.Instance.AddEnemy(this);
@@ -33,7 +34,6 @@ public class MeleeAttacker : Unit, IObserveStageChange
             if(detcoroutine == null)
             {
                 StartCoroutine(DetectTarget());
-                Debug.Log(MoveSpeed);
             }
         else
             isBattlePhaseStart = false;

@@ -36,7 +36,10 @@ public abstract partial class Unit : MonoBehaviour
     //▼ SP활성화 여부 전달용 변수
     protected bool isSPFull;
     public bool IsSPFull => isSPFull;
-    
+
+    protected int curNodeIndex;
+    public int NodeIndex => curNodeIndex;
+
     protected virtual void Awake()
     {
         UnitInit();
@@ -49,8 +52,11 @@ public abstract partial class Unit : MonoBehaviour
         detectRange = 10f;
         interactRange = unitData.interactRange;
         targetLayerMask = unitData.targetLayer;
-    } 
+        curNodeIndex = PathFinder.Instance.GetIndexByVector2(transform.position);
+        Debug.Log(curNodeIndex);
+    }
 
+   
 
     public abstract void BaseAttack();// 기본 공격
     public abstract void SkillAttack();// 스킬 공격
@@ -60,29 +66,30 @@ public abstract partial class Unit : MonoBehaviour
     /// </summary>
     /// <param name="colliders">감지할 콜라이더 배열</param>
     /// <returns></returns>
-    protected Collider2D FindNearestCollider(Collider2D[] colliders)
-    {
-        float minDistance = float.MaxValue;
-        float distance;
-        Collider2D minCol = null;
+     protected Collider2D FindNearestCollider(Collider2D[] colliders)
+     {
+         float minDistance = float.MaxValue;
+         float distance;
+         Collider2D minCol = null;
 
         foreach(var col in colliders)
-        {
-            distance = (col.transform.position - transform.position).sqrMagnitude;
+         {
+             distance = (col.transform.position - transform.position).sqrMagnitude;
            
             if (distance < minDistance)
-            {
+           {
                 minCol = col; 
-                minDistance = distance;     
-            }
+               minDistance = distance;     
+             }
         }
         return minCol;
-    }
-
+     }
+     
     public void SetTarget(Vector2 target)
     {
         targetPosition = target;
     }
+
     /// <summary>
     /// 타깃 감지용 코루틴 함수
     /// </summary>
@@ -122,7 +129,6 @@ public abstract partial class Unit : MonoBehaviour
                 {
                     isTargetInInteractRange = false;
                     BTree.SetVariableValue<bool>("IsTargetDetected",isTargetInInteractRange);
-                   
                 }
             }
             else
