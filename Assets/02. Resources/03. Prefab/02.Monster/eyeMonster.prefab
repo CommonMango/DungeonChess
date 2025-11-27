@@ -174,9 +174,11 @@ MonoBehaviour:
   BTree: {fileID: 1543635102426007615}
   unitData: {fileID: 11400000, guid: 719f8238c649b9349bd5f86ab9f76bef, type: 2}
   colliders: []
+  unitCol: {fileID: 5256852776635205535}
   isMoveReady: 0
   nextNodeIndex: 0
   cost: 0
+  prvNodeIndex: 0
 --- !u!114 &1543635102426007615
 MonoBehaviour:
   m_ObjectHideFlags: 0

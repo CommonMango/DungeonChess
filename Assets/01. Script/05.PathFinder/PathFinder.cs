@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public struct TileNode
 {
@@ -71,8 +70,9 @@ public class PathFinder : SingleTon<PathFinder>
     public List<int> GetAroundIndex(int curIndex, int prevIndex)
     {
         List<int>aroundNode = new List<int>();
-        int gridHeight = (maxY - minY + 2)/2; 
-        int gridWidth = (maxX - minX + 2)/2; 
+
+        int gridHeight = (maxY - minY)/2 + 1; 
+        int gridWidth = (maxX - minX)/2 + 1; 
         int calNode;//계산된 노드
         
         for (int dy = gridWidth; dy >= 0 - gridWidth; dy -= gridWidth )
@@ -89,11 +89,13 @@ public class PathFinder : SingleTon<PathFinder>
                 
                 else if(dx == 1 && curIndex % gridWidth == 0 )//오른쪽 범위 밖 노드 제외
                     continue;
-                
+
                 else if(dx + dy == 0) //자기 자신제외
                     continue;
+
                 else if(calNode == prevIndex) //바로 전에 갔었던 길이면 제외
                     continue;
+
                 else aroundNode.Add(calNode); 
             }
         }
@@ -152,7 +154,7 @@ public class PathFinder : SingleTon<PathFinder>
     public Vector2 ConvertPositionToCloseNode(Vector2 pos)
     {
         float x = Mathf.Round((pos.x - minX) / tileGap) * tileGap + minX;
-        float y = Mathf.Round((pos.x - minY) / tileGap) * tileGap + minY;
+        float y = Mathf.Round((pos.y - minY) / tileGap) * tileGap + minY;
         Vector2 CloseNode = new Vector2(x,y);
         return CloseNode;
     }

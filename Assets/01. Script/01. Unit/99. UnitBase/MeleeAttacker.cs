@@ -37,12 +37,15 @@ public class MeleeAttacker : Unit, IObserveStageChange
             {
                 isBattlePhaseStart = true;
                 BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
+                unitCol.isTrigger = true;
                 SetTarget();
+
             }
         else
         {
             isBattlePhaseStart = false;
             BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
+            unitCol.isTrigger = false;
             SetTarget();
         }
     }

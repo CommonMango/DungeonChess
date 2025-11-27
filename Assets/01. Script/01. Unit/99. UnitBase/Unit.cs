@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
 using Unity.Behavior;
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 
 public abstract partial class Unit : MonoBehaviour
@@ -15,6 +11,7 @@ public abstract partial class Unit : MonoBehaviour
     [SerializeField] public UnitData unitData; //잠깐 열음 
     
     [SerializeField] public Collider2D[] colliders;
+    [SerializeField] protected CapsuleCollider2D unitCol; 
     //▼상호작용 범위
     protected float interactRange; 
     
@@ -152,8 +149,7 @@ public abstract partial class Unit : MonoBehaviour
                 isTargetInInteractRange = false;
                 BTree.SetVariableValue<bool>("IsTargetDetected",false);
                 return false;
-            }
-           
+            } 
         }       
     }    
 }

@@ -1,4 +1,3 @@
-using UnityEditor.SceneManagement;
 
 public interface IObserveStageChange
 {
