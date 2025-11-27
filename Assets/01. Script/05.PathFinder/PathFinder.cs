@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-using JetBrains.Annotations;
+
 
 public struct TileNode
 {
@@ -65,7 +65,7 @@ public class PathFinder : SingleTon<PathFinder>
         InitHValue(aroundList);
         return resultIndex;
     }
-
+    
 
     //주변 8방향의 Index가져오기 
     public List<int> GetAroundIndex(int curIndex)

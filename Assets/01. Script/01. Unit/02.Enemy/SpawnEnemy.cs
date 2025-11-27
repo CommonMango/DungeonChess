@@ -6,7 +6,8 @@ public class SpawnEnemy : MonoBehaviour
 
     void Start()
     {
-        SpawnUnit();
+       
+            SpawnUnit();
     }
     
     public int GetPossibleindex()
@@ -27,7 +28,6 @@ public class SpawnEnemy : MonoBehaviour
         }
         if(resultIndex == 0)
             Debug.LogError("가능한 위치를 찾지 못함");
-
         return resultIndex; 
     }
 
@@ -36,7 +36,9 @@ public class SpawnEnemy : MonoBehaviour
     {
         int spawnIndex = GetPossibleindex();
         var spawnNode = PathFinder.Instance.GetTileNodeByIndex(spawnIndex);
+       
         Instantiate(enemy, spawnNode.pos , Quaternion.identity);
+        
         PathFinder.Instance.SetPosCost(spawnIndex, PathFinder.Instance.ObstacleCost);        
     }
 }

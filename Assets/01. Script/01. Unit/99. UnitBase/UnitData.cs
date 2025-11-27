@@ -19,10 +19,10 @@ public class UnitData : ScriptableObject
     [SerializeField] public float unitMaxSP;
     //▼ 기본 공격 속도
     [SerializeField] public float unitMaxAttackSpeed;
-    //▼ 타깃 레이어
-    [SerializeField] public LayerMask targetLayer;
     //▼ 동료 여부
     [SerializeField] public bool isAlly;
+    //▼ 아군이라면 비용
+    [SerializeField] public float cost;
  
 
     

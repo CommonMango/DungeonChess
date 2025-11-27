@@ -1,60 +1,70 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 
-public class DragUnit : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler,IObserveStageChange
+//마우스 드래그하는 클래스인데 일단 나중에..
+public class DragUnit : MonoBehaviour, IObserveStageChange
 {
-    Transform originalParent;
-    bool isDragable = true;
-    Unit unit;
+    private Camera cam;
+    private Vector3 dragOffset;
+    private bool isDragable = true;
+
+    private Unit unit;
 
     void Awake()
     {
-        unit = GetComponent<Unit>();    
+        cam = Camera.main;
+        unit = GetComponent<Unit>();
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    void OnMouseDown()
     {
-        if(!isDragable)
-            return;
+        if (!isDragable) return;
 
-        originalParent = transform.parent;
-        transform.SetParent(originalParent.root);
+        Vector3 mousePos = GetMouseWorldPos();
+        dragOffset = transform.position - mousePos;
     }
 
-    public void OnDrag(PointerEventData eventData)
+    void OnMouseDrag()
     {
-        if(!isDragable)
-            return;
-        
-        transform.position = eventData.position;   
+        if (!isDragable) return;
+
+        Vector3 mousePos = GetMouseWorldPos();
+        mousePos.z = 0;
+
+        transform.position = mousePos + dragOffset;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        if(!isDragable)
-            return;
-        
-        MoveUnit(eventData.position); //유닛 해당 위치로 옮기기 
+    void OnMouseUp()
+{
+    if (!isDragable) return;
 
-        transform.SetParent(originalParent); 
-    }
+    Vector3 mousePos = GetMouseWorldPos();
+    Vector2 snap = PathFinder.Instance.ConvertPositionToCloseNode(mousePos);
+    transform.position = snap;
 
-    public void MoveUnit(Vector2 movePos)
+    int newIndex = PathFinder.Instance.GetIndexByVector2(snap);
+
+    // 기존 타일 비우기
+    PathFinder.Instance.SetPosCost(unit.NodeIndex, 0);
+
+    // NodeIndex + BTree 조건 처리 + UnitManager update 전부 내부에서 처리됨
+    unit.SetCurTile(newIndex);
+
+    // 새 타일 점유
+    PathFinder.Instance.SetPosCost(newIndex, PathFinder.Instance.ObstacleCost);
+}
+
+    Vector3 GetMouseWorldPos()
     {
-        transform.position = PathFinder.Instance.ConvertPositionToCloseNode(movePos); 
-        int index = PathFinder.Instance.GetIndexByVector2(transform.position);
-        unit.SetCurTile(index);
+        Vector3 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos.z = 0;
+        return mousePos;
     }
 
     public void InChangeStageState(PhaseState changeState)
     {
         if(changeState == PhaseState.Placement)
-        {
             isDragable = true;
-        }   
         else
-        {
             isDragable = false;
-        } 
     }
 }

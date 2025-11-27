@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 /// <summary>
 /// 유닛과 해당 유닛위치의 인덱스를 관리하는 매니저 
@@ -23,7 +23,7 @@ public class UnitManager : SingleTon<UnitManager>
         
     public void RmvEnemy(Unit enemy) 
     {
-        PathFinder.Instance.SetPosCost(EnemyUnits[enemy],0);
+        PathFinder.Instance.SetPosCost(EnemyUnits[enemy], 0);
         EnemyUnits.Remove(enemy);
 
         if(EnemyUnits.Count == 0)
@@ -52,15 +52,36 @@ public class UnitManager : SingleTon<UnitManager>
         {
             PathFinder.Instance.SetPosCost(AllyUnits[unit], 0);
             AllyUnits[unit] = unit.NodeIndex;
+            
             PathFinder.Instance.SetPosCost(AllyUnits[unit], PathFinder.Instance.ObstacleCost);
         }
         else
         {
             PathFinder.Instance.SetPosCost(EnemyUnits[unit], 0);
             EnemyUnits[unit] = unit.NodeIndex;
+
             PathFinder.Instance.SetPosCost(EnemyUnits[unit], PathFinder.Instance.ObstacleCost);
         }
     } 
+    public Unit FindTargetIndex(int index, bool isTargetAlly)
+    {
+        Unit result;
+        if(isTargetAlly)
+        {
+             result = AllyUnits
+            .Where(pair => pair.Value == index)
+            .Select(pair => pair.Key)
+            .FirstOrDefault();
+        }
+        else
+        {
+            result = EnemyUnits
+            .Where(pair => pair.Value == index)
+            .Select(pair => pair.Key)
+            .FirstOrDefault();
+        }
+        return result;
+    }
 
     public int SetTargetIndex(int selfIndex, bool isAlly)
     {

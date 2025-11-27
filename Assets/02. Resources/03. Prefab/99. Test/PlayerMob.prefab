@@ -155,7 +155,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeleeAttacker
   BTree: {fileID: 361222191170455072}
   unitData: {fileID: 11400000, guid: db762154eb2493e4ba8251593a56d2b8, type: 2}
-  colliders: []
   isMoveReady: 0
   nextNodeIndex: 0
 --- !u!70 &736425730664526262
@@ -188,7 +187,7 @@ CapsuleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

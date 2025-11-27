@@ -30,12 +30,10 @@ public class MoveManager : SingleTon<MoveManager>
         }
     }
     
-    public void SetNextNode (Unit request)
+    public void SetNextNode(Unit request)
     {
         request.nextNodeIndex = PathFinder.Instance.FindPath(request.NodeIndex, request.TargetIndex);
-        
         ReserveTile(request.nextNodeIndex);
-        EmeptyTile(request.NodeIndex);
     }
 
     public void ReserveTile(int tileIndex)

@@ -1,3 +1,5 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -7,10 +9,19 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private Transform originalParent;
     [SerializeField] private CanvasGroup canvasGroup;
     [SerializeField] private GameObject unitPrefab;
-    bool isAllyAvailble = false;
+    [SerializeField] private UnitData unitData;
+    [SerializeField] private TextMeshProUGUI tmpro; 
+    [SerializeField] private Coroutine coroutine;
+    WaitForSeconds wfs = new WaitForSeconds(1f);
 
+    bool isAllyAvailble = false;
+    
     public void Start()
     {
+        
+       
+        
+
         if(!isAllyAvailble)
         {
             SpawnUnit();
@@ -37,8 +48,21 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         canvasGroup.alpha = 1f; //투명도 원상복귀
         canvasGroup.blocksRaycasts = true; //레이캐스트 원상복귀
-        SpawnUnit(); //유닛 스폰
-       
+        if(MoneyManager.Instance.CurMoney < unitData.cost )
+        {
+            tmpro.text = "돈이 부족합니다..";
+            if(coroutine == null)
+            {
+                coroutine = StartCoroutine(StartTxtDelay());
+            }
+        }
+        else
+        {
+            MoneyManager.Instance.BuyUnit(unitData.cost);
+            SpawnUnit(); //유닛 스폰
+            
+        }
+
         transform.SetParent(originalParent); 
 
     }
@@ -74,10 +98,27 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     private void SpawnUnit()
     {
         int spawnIndex = GetPossibleindex();
+        if(spawnIndex == 0)
+        {
+            tmpro.text = "유닛이 꽉 찼습니다.";
+            if(coroutine == null)
+            {
+                coroutine = StartCoroutine(StartTxtDelay());
+            }
+            return;
+        }
         var spawnNode = PathFinder.Instance.GetTileNodeByIndex(spawnIndex);
         Instantiate(unitPrefab, spawnNode.pos , Quaternion.identity);
         PathFinder.Instance.SetPosCost(spawnIndex, PathFinder.Instance.ObstacleCost);        
+       
+    }
+    private IEnumerator StartTxtDelay()
+    {
+        yield return wfs;
+        tmpro.text = "";
     }
 }
+
+
 
    

@@ -8,14 +8,17 @@ public class MeleeAttacker : Unit, IObserveStageChange
         if(unitData.isAlly)
         {
             UnitManager.Instance.AddAlly(this);
+        
         }
         else
-        UnitManager.Instance.AddEnemy(this);
+        {
+            UnitManager.Instance.AddEnemy(this);
+            
+        }
     }
     protected override void Start()
     {
         base.Start();
-        SetTarget();
     }
     void OnDisable()
     {
@@ -25,7 +28,7 @@ public class MeleeAttacker : Unit, IObserveStageChange
             UnitManager.Instance.RmvAlly(this);   
         }
         else
-        UnitManager.Instance.RmvEnemy(this);
+            UnitManager.Instance.RmvEnemy(this);
     }
     
     public void InChangeStageState(PhaseState changeState)
@@ -46,7 +49,7 @@ public class MeleeAttacker : Unit, IObserveStageChange
 
     public override void BaseAttack()
     {
-        
+
         Debug.Log("기본 공격함");
     }
 

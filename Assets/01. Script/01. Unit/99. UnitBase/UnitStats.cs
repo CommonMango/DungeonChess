@@ -45,7 +45,8 @@ public abstract partial class Unit
     
     protected virtual void Start() 
     {
-        InitCurStat();  
+        InitCurStat(); 
+
     }
     
     private void InitMaxStat()
@@ -56,6 +57,7 @@ public abstract partial class Unit
         maxHp = unitData.unitMaxHp;
         maxSP = unitData.unitMaxSP;
         name = unitData.unitName;
+        cost = unitData.cost;
     }
     
     /// <summary>
