@@ -45,14 +45,20 @@ public partial class MoveToTargetAction : Action
                 targetVector = PathFinder.Instance.GetTileNodeByIndex(meleeAttacker.Value.nextNodeIndex).pos;
                 targetdirection = (targetVector - curVector).normalized; 
             }
+            
             curVector = Self.Value.transform.position;
             nextPos = curVector + targetdirection * meleeAttacker.Value.MoveSpeed * Time.deltaTime;
+            
             if(Vector2.Distance(curVector, targetVector) <= meleeAttacker.Value.MoveSpeed * Time.deltaTime)
             {
                 nextPos = targetVector;
                 MoveManager.Instance.EmeptyTile(meleeAttacker.Value.NodeIndex);
                 meleeAttacker.Value.SetCurTile(meleeAttacker.Value.nextNodeIndex);
-                meleeAttacker.Value.SetTarget();
+                
+                if (!meleeAttacker.Value.DetectTarget())
+                {
+                    meleeAttacker.Value.SetTarget();
+                }
             }
 
             Rigid.Value.MovePosition(nextPos);

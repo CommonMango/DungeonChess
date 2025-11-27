@@ -22,3 +22,6 @@ MonoBehaviour:
   unitMaxAttackSpeed: 5
   isAlly: 1
   cost: 10
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64

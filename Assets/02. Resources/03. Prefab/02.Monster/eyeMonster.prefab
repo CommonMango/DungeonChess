@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 9074384678635290123}
   - component: {fileID: 1543635102426007615}
   - component: {fileID: 9119110655325029103}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: eyeMonster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,8 +173,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeleeAttacker
   BTree: {fileID: 1543635102426007615}
   unitData: {fileID: 11400000, guid: 719f8238c649b9349bd5f86ab9f76bef, type: 2}
+  colliders: []
   isMoveReady: 0
   nextNodeIndex: 0
+  cost: 0
 --- !u!114 &1543635102426007615
 MonoBehaviour:
   m_ObjectHideFlags: 0

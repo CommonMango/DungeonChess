@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using Unity.VisualScripting;
 
 public struct TileNode
 {
@@ -30,6 +30,7 @@ public class PathFinder : SingleTon<PathFinder>
     public int MinY => minY; 
     [SerializeField] int startIndex = 1; // 시작 인덱스 
     [SerializeField] int tileGap = 2; //인접한 타일간 좌표 차이
+    public int TileGap => tileGap;
     private float obstacleCost = float.MaxValue/2;
     public float ObstacleCost => obstacleCost;
     void Awake()
@@ -57,22 +58,21 @@ public class PathFinder : SingleTon<PathFinder>
     /// <param name="curIndex">움직일 객체의 노드 인덱스</param>
     /// <param name="targetIndex">가야할 곳의 노드 인덱스</param>
     /// <returns></returns>
-    public int FindPath(int curIndex, int targetIndex)
+    public int FindPath(int curIndex, int targetIndex, int prevIndex)
     {
-        List<int>aroundList = GetAroundIndex(curIndex);
+        List<int>aroundList = GetAroundIndex(curIndex,prevIndex);
         CalcH(aroundList,targetIndex);
         int resultIndex = FinalDesNode(aroundList);
         InitHValue(aroundList);
         return resultIndex;
     }
     
-
     //주변 8방향의 Index가져오기 
-    public List<int> GetAroundIndex(int curIndex)
+    public List<int> GetAroundIndex(int curIndex, int prevIndex)
     {
         List<int>aroundNode = new List<int>();
-        int gridHeight = (maxY - minY + 2)/2;
-        int gridWidth = (maxX - minX + 2)/2;
+        int gridHeight = (maxY - minY + 2)/2; 
+        int gridWidth = (maxX - minX + 2)/2; 
         int calNode;//계산된 노드
         
         for (int dy = gridWidth; dy >= 0 - gridWidth; dy -= gridWidth )
@@ -92,12 +92,14 @@ public class PathFinder : SingleTon<PathFinder>
                 
                 else if(dx + dy == 0) //자기 자신제외
                     continue;
-
+                else if(calNode == prevIndex) //바로 전에 갔었던 길이면 제외
+                    continue;
                 else aroundNode.Add(calNode); 
             }
         }
         return aroundNode;
     }
+
     /// <summary>
     /// 모든 Vector2를 리스트로 가져옴 
     /// </summary>
@@ -157,7 +159,7 @@ public class PathFinder : SingleTon<PathFinder>
 
     //H값 구하기 
     /// <summary>
-    /// 주변 노드의 H값을 갱신해준다. 
+    /// 주변 노드의 H값(거리)을 갱신해준다. 
     /// </summary>
     /// <param name="aroundNode">주변 노드의 index를 담은 리스트</param>
     /// <param name="targetindex">목적지의 index값</param>
@@ -204,5 +206,4 @@ public class PathFinder : SingleTon<PathFinder>
             }
         }
     }
-
 }

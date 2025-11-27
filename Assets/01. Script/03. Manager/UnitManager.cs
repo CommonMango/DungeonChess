@@ -63,6 +63,7 @@ public class UnitManager : SingleTon<UnitManager>
             PathFinder.Instance.SetPosCost(EnemyUnits[unit], PathFinder.Instance.ObstacleCost);
         }
     } 
+    //index를 통해서 타깃을 찾는 메서드 
     public Unit FindTargetIndex(int index, bool isTargetAlly)
     {
         Unit result;
@@ -89,9 +90,10 @@ public class UnitManager : SingleTon<UnitManager>
         float minDistance = float.MaxValue; 
         var selfUnit = PathFinder.Instance.GetTileNodeByIndex(selfIndex);
         int targetIndex = 0;
-        
+       
         if(EnemyUnits.Count == 0 || AllyUnits.Count == 0) //둘 중 하나의 딕셔너리가 비어있으면 
         {
+            Debug.LogError("딕셔너리가 비었습니다.");
             return targetIndex; //0을 반환
         }
         
@@ -102,7 +104,7 @@ public class UnitManager : SingleTon<UnitManager>
                 var targetUnit = PathFinder.Instance.GetTileNodeByIndex(index);
                 distance = (targetUnit.pos - selfUnit.pos).sqrMagnitude; 
                 
-                if(minDistance > distance)
+                if(minDistance > distance )
                 {
                     targetIndex = index; 
                 }

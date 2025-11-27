@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 4520360856073740175}
   - component: {fileID: 658068704587061469}
   - component: {fileID: 7822250353471744569}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Attack animation_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,6 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MeleeAttacker
   BTree: {fileID: 658068704587061469}
   unitData: {fileID: 11400000, guid: db762154eb2493e4ba8251593a56d2b8, type: 2}
+  colliders: []
   isMoveReady: 0
   nextNodeIndex: 0
   cost: 0

@@ -23,6 +23,7 @@ public class UnitData : ScriptableObject
     [SerializeField] public bool isAlly;
     //▼ 아군이라면 비용
     [SerializeField] public float cost;
+    [SerializeField] public LayerMask targetLayer;
  
 
     

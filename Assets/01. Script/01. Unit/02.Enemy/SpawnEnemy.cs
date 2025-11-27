@@ -6,8 +6,10 @@ public class SpawnEnemy : MonoBehaviour
 
     void Start()
     {
-       
+        for(int i  = 0; i < 5; i++)
+        {
             SpawnUnit();
+        }
     }
     
     public int GetPossibleindex()

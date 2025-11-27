@@ -14,7 +14,6 @@ public partial class BaseAttackAction : Action
 
     protected override Status OnStart()
     {
-        
         return Status.Running;
     }
 
@@ -26,6 +25,7 @@ public partial class BaseAttackAction : Action
 
     protected override void OnEnd()
     {
+        MeleeAttacker.Value.DetectTarget();
     }
 }
 

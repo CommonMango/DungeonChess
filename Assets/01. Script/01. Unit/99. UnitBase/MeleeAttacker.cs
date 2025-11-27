@@ -48,16 +48,15 @@ public class MeleeAttacker : Unit, IObserveStageChange
     }
 
     public override void BaseAttack()
-    {
-
-        Debug.Log("기본 공격함");
+    {   
+        //targetUnit
     }
 
-    public override void SkillAttack()
-    {
-       Debug.Log ("스킬 공격함");
-       //그냥 좀 더 쎈 공격 베이스랑 같음 
-    }
+     public override void SkillAttack()
+     {
+        Debug.Log ("스킬 공격함");
+        //그냥 좀 더 쎈 공격 베이스랑 같음 
+     }
 
     
 }

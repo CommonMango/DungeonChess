@@ -15,6 +15,13 @@ MonoBehaviour:
   unitName: "\uD14C\uC2A4\uD2B8\uC6A9\uC801\uAD70"
   unitMaxHp: 100
   maxMoveSpeed: 10
-  interactRange: 10
+  interactRange: 1
   maxBaseAttackPower: 10
   useSkill: []
+  unitMaxSP: 0
+  unitMaxAttackSpeed: 0
+  isAlly: 0
+  cost: 0
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 128

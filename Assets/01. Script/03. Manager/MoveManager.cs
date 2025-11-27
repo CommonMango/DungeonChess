@@ -9,7 +9,6 @@ public class MoveManager : SingleTon<MoveManager>
     private Queue<Unit> ReadyRequests = new Queue<Unit>();
     private Unit curRequest;
 
-
     public void AddRequest(Unit unit)
     {
         if(!noneReadyRequests.Contains(unit))
@@ -32,7 +31,7 @@ public class MoveManager : SingleTon<MoveManager>
     
     public void SetNextNode(Unit request)
     {
-        request.nextNodeIndex = PathFinder.Instance.FindPath(request.NodeIndex, request.TargetIndex);
+        request.nextNodeIndex = PathFinder.Instance.FindPath(request.NodeIndex, request.TargetIndex, request.prvNodeIndex);
         ReserveTile(request.nextNodeIndex);
     }
 

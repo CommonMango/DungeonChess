@@ -18,10 +18,6 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     
     public void Start()
     {
-        
-       
-        
-
         if(!isAllyAvailble)
         {
             SpawnUnit();
