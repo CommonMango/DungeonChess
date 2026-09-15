@@ -106,7 +106,8 @@ public class UnitManager : SingleTon<UnitManager>
                 
                 if(minDistance > distance )
                 {
-                    targetIndex = index; 
+                    targetIndex = index;
+                    minDistance = distance; 
                 }
             }
         } 
