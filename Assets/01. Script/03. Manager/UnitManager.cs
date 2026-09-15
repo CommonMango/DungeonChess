@@ -13,7 +13,7 @@ public class UnitManager : SingleTon<UnitManager>
     [SerializeField] private GameObject Enemy;
     public void RmvAlly(Unit ally)
     {
-        PathFinder.Instance.SetPosCost(AllyUnits[ally], 0);
+        TileManager.Instance.SetPosCost(AllyUnits[ally], 0);
         AllyUnits.Remove(ally);
         if(AllyUnits.Count == 0)
         {
@@ -23,7 +23,7 @@ public class UnitManager : SingleTon<UnitManager>
         
     public void RmvEnemy(Unit enemy) 
     {
-        PathFinder.Instance.SetPosCost(EnemyUnits[enemy], 0);
+        TileManager.Instance.SetPosCost(EnemyUnits[enemy], 0);
         EnemyUnits.Remove(enemy);
 
         if(EnemyUnits.Count == 0)
@@ -50,17 +50,17 @@ public class UnitManager : SingleTon<UnitManager>
     {
         if(AllyUnits.ContainsKey(unit))
         {
-            PathFinder.Instance.SetPosCost(AllyUnits[unit], 0);
+            TileManager.Instance.SetPosCost(AllyUnits[unit], 0);
             AllyUnits[unit] = unit.NodeIndex;
             
-            PathFinder.Instance.SetPosCost(AllyUnits[unit], PathFinder.Instance.ObstacleCost);
+            TileManager.Instance.SetPosCost(AllyUnits[unit], TileManager.Instance.ObstacleCost);
         }
         else
         {
-            PathFinder.Instance.SetPosCost(EnemyUnits[unit], 0);
+            TileManager.Instance.SetPosCost(EnemyUnits[unit], 0);
             EnemyUnits[unit] = unit.NodeIndex;
 
-            PathFinder.Instance.SetPosCost(EnemyUnits[unit], PathFinder.Instance.ObstacleCost);
+            TileManager.Instance.SetPosCost(EnemyUnits[unit], TileManager.Instance.ObstacleCost);
         }
     } 
     //index를 통해서 타깃을 찾는 메서드 
@@ -88,7 +88,7 @@ public class UnitManager : SingleTon<UnitManager>
     {
         float distance;
         float minDistance = float.MaxValue; 
-        var selfUnit = PathFinder.Instance.GetTileNodeByIndex(selfIndex);
+        var selfUnit = TileManager.Instance.GetTileNodeByIndex(selfIndex);
         int targetIndex = 0;
        
         if(EnemyUnits.Count == 0 || AllyUnits.Count == 0) //둘 중 하나의 딕셔너리가 비어있으면 
@@ -101,7 +101,7 @@ public class UnitManager : SingleTon<UnitManager>
         {
             foreach(var index in EnemyUnits.Values)
             {
-                var targetUnit = PathFinder.Instance.GetTileNodeByIndex(index);
+                var targetUnit = TileManager.Instance.GetTileNodeByIndex(index);
                 distance = (targetUnit.pos - selfUnit.pos).sqrMagnitude; 
                 
                 if(minDistance > distance )
@@ -115,7 +115,7 @@ public class UnitManager : SingleTon<UnitManager>
         {
             foreach(var index in AllyUnits.Values)
             {
-                var targetUnit = PathFinder.Instance.GetTileNodeByIndex(index);
+                var targetUnit = TileManager.Instance.GetTileNodeByIndex(index);
                 distance = (targetUnit.pos - selfUnit.pos).sqrMagnitude; 
                 
                 if(minDistance > distance)

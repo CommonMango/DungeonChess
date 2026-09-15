@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -14,16 +15,6 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     [SerializeField] private Coroutine coroutine;
     WaitForSeconds wfs = new WaitForSeconds(1f);
 
-    bool isAllyAvailble = false;
-    
-    public void Start()
-    {
-        if(!isAllyAvailble)
-        {
-            SpawnUnit();
-            isAllyAvailble = true;
-        }
-    }
     public void OnBeginDrag(PointerEventData eventData)
     {
         originalParent = transform.parent;
@@ -55,7 +46,8 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         else
         {
             MoneyManager.Instance.BuyUnit(unitData.cost);
-            SpawnUnit(); //유닛 스폰
+            Vector2 worldPos = ConvertCanvasPosToWorldPos(eventData.position); //캔버스 좌표를 월드좌표로 변환
+            SpawnUnit(worldPos); //유닛 스폰
             
         }
 
@@ -63,51 +55,30 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     }
 
-    public int GetPossibleindex()
+
+    private Vector2 ConvertCanvasPosToWorldPos(Vector2 canvasPos)
     {
-        // 맨 아랫 줄에서 스폰할 수 있는 벡터의 인덱스를 찾는다. 
-        // 패스파인더에게 맨 아랫줄의 인덱스를 하나씩 넣어보고 해당 타일노드의 cost가 몇인지를 확인하고 타일노드의 cost가 0이라면 아무것도 없는 곳이니깐 배치가 가능하다. 
-        // 0이 아니라면 무언가 있는 곳이니깐 배치가 불가능하다. 
-        // 맨 아랫줄의 인덱스는 (minX,minY)벡터의 인덱스부터 (maxX,minY)의 인덱스까지다. 
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(canvasPos);
+        worldPos.z = 0f;
+        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
 
-        int startIndex = PathFinder.Instance.GetIndexByVector2(new Vector2(PathFinder.Instance.MinX,PathFinder.Instance.MinY));
-        int EndIndex = PathFinder.Instance.GetIndexByVector2(new Vector2(PathFinder.Instance.MaxX,PathFinder.Instance.MinY));
-        int resultIndex = 0;
-        
-        for (int i = startIndex; i <= EndIndex; i++)
-        {
-            var target = PathFinder.Instance.GetTileNodeByIndex(i);
-
-            if( target.cost == 0)
-            {
-                resultIndex = i;
-                break;
-            }  
-        }
-        if(resultIndex == 0)
-            Debug.LogError("가능한 위치를 찾지 못함");
-
-        return resultIndex; 
+        return worldPos2D;
     }
 
-    //스폰 가능한 위치를 찾아서 스폰하는 매서드  
-    private void SpawnUnit()
+    //위치를 받아서 가까운 위치에 스폰하는 매서드  
+    
+    private void SpawnUnit(Vector2 pos)
     {
-        int spawnIndex = GetPossibleindex();
-        if(spawnIndex == 0)
-        {
-            tmpro.text = "유닛이 꽉 찼습니다.";
-            if(coroutine == null)
-            {
-                coroutine = StartCoroutine(StartTxtDelay());
-            }
-            return;
-        }
-        var spawnNode = PathFinder.Instance.GetTileNodeByIndex(spawnIndex);
-        Instantiate(unitPrefab, spawnNode.pos , Quaternion.identity);
-        PathFinder.Instance.SetPosCost(spawnIndex, PathFinder.Instance.ObstacleCost);        
+        var spawnNode= TileManager.Instance.ConvertPositionToCloseNode(pos);
+        var tileNode = TileManager.Instance.GetTileNodeByIndex(TileManager.Instance.GetIndexByVector2(spawnNode));
+        
+
+        Instantiate(unitPrefab, tileNode.pos , Quaternion.identity);
+        TileManager.Instance.SetPosCost(TileManager.Instance.GetIndexByVector2(tileNode.pos), TileManager.Instance.ObstacleCost);       
        
     }
+
+   
     private IEnumerator StartTxtDelay()
     {
         yield return wfs;

@@ -20,7 +20,7 @@ public class SpawnEnemy : MonoBehaviour
         
         for (int i = startIndex; i <= EndIndex; i++)
         {
-            var target = PathFinder.Instance.GetTileNodeByIndex(i);
+            var target = TileManager.Instance.GetTileNodeByIndex(i);
 
             if( target.cost == 0)
             {
@@ -37,10 +37,10 @@ public class SpawnEnemy : MonoBehaviour
     private void SpawnUnit()
     {
         int spawnIndex = GetPossibleindex();
-        var spawnNode = PathFinder.Instance.GetTileNodeByIndex(spawnIndex);
+        var spawnNode = TileManager.Instance.GetTileNodeByIndex(spawnIndex);
        
         Instantiate(enemy, spawnNode.pos , Quaternion.identity);
         
-        PathFinder.Instance.SetPosCost(spawnIndex, PathFinder.Instance.ObstacleCost);        
+        TileManager.Instance.SetPosCost(spawnIndex, TileManager.Instance.ObstacleCost);        
     }
 }

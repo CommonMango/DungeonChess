@@ -16,7 +16,7 @@ public struct TileNode
     }
 }
 
-public class PathFinder : SingleTon<PathFinder>
+public class TileManager : SingleTon<TileManager>
 {
     private Dictionary<int , TileNode> standAbleTiles = new(); //노드인덱스를 키로 노드정보를 가져오는 딕셔너리 
     [SerializeField] int maxX = 11; //x최대 좌표 

@@ -56,7 +56,7 @@ public abstract partial class Unit : MonoBehaviour
     {
         useSkill = (Skill[])unitData.useSkill.Clone();
         interactRange = unitData.interactRange;
-        curNodeIndex = PathFinder.Instance.GetIndexByVector2(transform.position);
+        curNodeIndex = TileManager.Instance.GetIndexByVector2(transform.position);
         isTargetInInteractRange = false;
         targetLayerMask = unitData.targetLayer;
         prvNodeIndex = 0;
@@ -110,7 +110,7 @@ public abstract partial class Unit : MonoBehaviour
     /// <returns></returns>
     public virtual bool DetectTarget()
     {
-        float boxCoor = PathFinder.Instance.TileGap * (interactRange * 2 + 1);
+        float boxCoor = TileManager.Instance.TileGap * (interactRange * 2 + 1);
         Vector2 boxSize = new Vector2(boxCoor, boxCoor);
         
         while (true)

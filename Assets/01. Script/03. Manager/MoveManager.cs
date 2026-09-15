@@ -31,17 +31,17 @@ public class MoveManager : SingleTon<MoveManager>
     
     public void SetNextNode(Unit request)
     {
-        request.nextNodeIndex = PathFinder.Instance.FindPath(request.NodeIndex, request.TargetIndex, request.prvNodeIndex);
+        request.nextNodeIndex = TileManager.Instance.FindPath(request.NodeIndex, request.TargetIndex, request.prvNodeIndex);
         ReserveTile(request.nextNodeIndex);
     }
 
     public void ReserveTile(int tileIndex)
     {
-        PathFinder.Instance.SetPosCost(tileIndex, PathFinder.Instance.ObstacleCost);
+        TileManager.Instance.SetPosCost(tileIndex, TileManager.Instance.ObstacleCost);
     }
     public void EmeptyTile(int tileIndex)
     {
-        PathFinder.Instance.SetPosCost(tileIndex, 0);
+        TileManager.Instance.SetPosCost(tileIndex, 0);
     }
 
 }

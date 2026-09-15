@@ -42,7 +42,7 @@ public partial class MoveToTargetAction : Action
             if(!isMoving)
             {
                 isMoving = true;
-                targetVector = PathFinder.Instance.GetTileNodeByIndex(meleeAttacker.Value.nextNodeIndex).pos;
+                targetVector = TileManager.Instance.GetTileNodeByIndex(meleeAttacker.Value.nextNodeIndex).pos;
                 targetdirection = (targetVector - curVector).normalized; 
             }
             
