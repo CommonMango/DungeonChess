@@ -5,7 +5,6 @@ using UnityEngine;
 public class DragUnit : MonoBehaviour, IObserveStageChange
 {
     
-    private bool isDragable = true;
     private Unit unit;
 
     void Awake()
@@ -13,7 +12,7 @@ public class DragUnit : MonoBehaviour, IObserveStageChange
         unit = GetComponent<Unit>();
     }
    
-    public bool isDraggable = true; // 특정 조건일 때만 true로
+    public bool isDraggable = true; // 특정 조건(?)일 때만 true로
 
     private Vector3 offset;
 
@@ -42,8 +41,8 @@ public class DragUnit : MonoBehaviour, IObserveStageChange
     public void InChangeStageState(PhaseState changeState)
     {
         if(changeState == PhaseState.Placement)
-            isDragable = true;
+            isDraggable = true;
         else
-            isDragable = false;
+            isDraggable = false;
     } 
 }

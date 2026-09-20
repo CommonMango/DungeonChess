@@ -1,14 +1,29 @@
 using UnityEngine;
 using TMPro;
 
-public class MoneyManager :SingleTon<MoneyManager>
+public class MoneyManager :MonoBehaviour
 {
     [SerializeField] float defalutMoney = 100;
     [SerializeField] float curMoney;
     public float CurMoney => curMoney;
     [SerializeField] TextMeshProUGUI moneyTxt;
 
-   
+    private static MoneyManager instance;
+    public static MoneyManager Instance{ get => instance; private set => instance = value;}
+
+    void Awake()
+    {
+         if(instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
     void OnEnable()
     {
         curMoney = defalutMoney;

@@ -16,7 +16,7 @@ public struct TileNode
     }
 }
 
-public class TileManager : SingleTon<TileManager>
+public class TileManager : MonoBehaviour
 {
     private Dictionary<int , TileNode> standAbleTiles = new(); //노드인덱스를 키로 노드정보를 가져오는 딕셔너리 
     [SerializeField] int maxX = 11; //x최대 좌표 
@@ -32,9 +32,25 @@ public class TileManager : SingleTon<TileManager>
     public int TileGap => tileGap;
     private float obstacleCost = float.MaxValue/2;
     public float ObstacleCost => obstacleCost;
+
+    private static TileManager instance;
+    public static TileManager Instance{ get => instance; private set => instance = value;}
+
+    
+
     void Awake()
     {
         InitTiles();
+         if(instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
     }
     
     //Tiles 첫 초기화 
@@ -208,4 +224,15 @@ public class TileManager : SingleTon<TileManager>
             }
         }
     }
+
+    public bool CheckInMap(Vector2 pos)
+    {
+        if(pos.x < minX || pos.x > maxX || pos.y < minY || pos.y > maxY)
+        {
+            return false;
+        }
+        return true;
+    }
 }
+
+    

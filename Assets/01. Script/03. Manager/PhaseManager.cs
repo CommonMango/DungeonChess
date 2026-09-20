@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using UnityEngine;
 public enum PhaseState
 {
     Placement, Battle, Reward, Lose
 }
 
-public class PhaseManager : SingleTon<PhaseManager>
+public class PhaseManager : MonoBehaviour
 {
     //▼ 현재 상태
     private PhaseState currentState;
@@ -16,9 +17,24 @@ public class PhaseManager : SingleTon<PhaseManager>
     public void AddSubScriber (IObserveStageChange subscriber) => stageStateActions.Add(subscriber);
     public void RmvSubScriber (IObserveStageChange subscriber) => stageStateActions.Remove(subscriber);
 
+    private static PhaseManager instance;
+    public static PhaseManager Instance{ get => instance; private set => instance = value;}
+
+
+
     void Awake()
-    {
-        SingletonInit();
+    { 
+        if(instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+       
         ChangeState(PhaseState.Placement);
     }
     

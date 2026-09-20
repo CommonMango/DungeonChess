@@ -35,26 +35,13 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         canvasGroup.alpha = 1f; //투명도 원상복귀
         canvasGroup.blocksRaycasts = true; //레이캐스트 원상복귀
-        if(MoneyManager.Instance.CurMoney < unitData.cost )
-        {
-            tmpro.text = "돈이 부족합니다..";
-            if(coroutine == null)
-            {
-                coroutine = StartCoroutine(StartTxtDelay());
-            }
-        }
-        else
-        {
-            MoneyManager.Instance.BuyUnit(unitData.cost);
-            Vector2 worldPos = ConvertCanvasPosToWorldPos(eventData.position); //캔버스 좌표를 월드좌표로 변환
-            SpawnUnit(worldPos); //유닛 스폰
+        Vector2 worldPos = ConvertCanvasPosToWorldPos(eventData.position);//캔버스 좌표를 월드좌표로 변환
+        SpawnUnit(worldPos); //유닛 스폰        
             
-        }
-
+        
         transform.SetParent(originalParent); 
 
     }
-
 
     private Vector2 ConvertCanvasPosToWorldPos(Vector2 canvasPos)
     {
@@ -71,7 +58,14 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     {
         var spawnNode= TileManager.Instance.ConvertPositionToCloseNode(pos);
         var tileNode = TileManager.Instance.GetTileNodeByIndex(TileManager.Instance.GetIndexByVector2(spawnNode));
-        
+        if(tileNode.cost >= TileManager.Instance.ObstacleCost || !TileManager.Instance.CheckInMap(pos)) //해당 위치에 장애물이 있거나 맵 밖이면 배치 실패 피드백 출력 
+        {
+            tmpro.text = "해당 위치에 유닛을 배치할 수 없습니다.";
+            if(coroutine != null)
+                StopCoroutine(coroutine);
+            coroutine = StartCoroutine(StartTxtDelay());
+            return;
+        }
 
         Instantiate(unitPrefab, tileNode.pos , Quaternion.identity);
         TileManager.Instance.SetPosCost(TileManager.Instance.GetIndexByVector2(tileNode.pos), TileManager.Instance.ObstacleCost);       

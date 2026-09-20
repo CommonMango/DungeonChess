@@ -5,16 +5,38 @@ using UnityEngine;
 /// 유닛과 해당 유닛위치의 인덱스를 관리하는 매니저 
 /// </summary>
 
-public class UnitManager : SingleTon<UnitManager>
+public class UnitManager :MonoBehaviour
 {
     [SerializeField] private Dictionary<Unit, int> AllyUnits = new();
     [SerializeField] private Dictionary<Unit, int> EnemyUnits = new();
     [SerializeField] private GameObject Ally;
     [SerializeField] private GameObject Enemy;
+    
+    private static UnitManager instance;
+    public static UnitManager Instance{ get => instance; private set => instance = value;}
+
+    private void Awake()
+    {
+        if(instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+    
+    
     public void RmvAlly(Unit ally)
     {
-        TileManager.Instance.SetPosCost(AllyUnits[ally], 0);
-        AllyUnits.Remove(ally);
+        if(AllyUnits.ContainsKey(ally))
+        {
+            TileManager.Instance.SetPosCost(AllyUnits[ally], 0);
+            AllyUnits.Remove(ally);
+        }
         if(AllyUnits.Count == 0)
         {
             PhaseManager.Instance.ChangeState(PhaseState.Lose);
@@ -23,18 +45,17 @@ public class UnitManager : SingleTon<UnitManager>
         
     public void RmvEnemy(Unit enemy) 
     {
-        TileManager.Instance.SetPosCost(EnemyUnits[enemy], 0);
-        EnemyUnits.Remove(enemy);
+        if(EnemyUnits.ContainsKey(enemy))
+        {
+            TileManager.Instance.SetPosCost(EnemyUnits[enemy], 0);
+            EnemyUnits.Remove(enemy);            
+        }
 
         if(EnemyUnits.Count == 0)
         {
             PhaseManager.Instance.ChangeState(PhaseState.Reward);
         }
     }   
-    void Awake()
-    {
-        SingletonInit();
-    }
    
     public void AddAlly(Unit ally)
     {
