@@ -56,9 +56,18 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     
     private void SpawnUnit(Vector2 pos)
     {
+        if(!TileManager.Instance.CheckInMap(pos)) //맵 밖이면 배치 실패 피드백 출력 
+        {
+            tmpro.text = "맵 밖에 유닛을 배치할 수 없습니다.";
+            if(coroutine != null)
+                StopCoroutine(coroutine);
+            coroutine = StartCoroutine(StartTxtDelay());
+            return;
+        }
+
         var spawnNode= TileManager.Instance.ConvertPositionToCloseNode(pos);
         var tileNode = TileManager.Instance.GetTileNodeByIndex(TileManager.Instance.GetIndexByVector2(spawnNode));
-        if(tileNode.cost >= TileManager.Instance.ObstacleCost || !TileManager.Instance.CheckInMap(pos)) //해당 위치에 장애물이 있거나 맵 밖이면 배치 실패 피드백 출력 
+        if(tileNode.cost >= TileManager.Instance.ObstacleCost) //해당 위치에 장애물이 있으면 피드백
         {
             tmpro.text = "해당 위치에 유닛을 배치할 수 없습니다.";
             if(coroutine != null)
