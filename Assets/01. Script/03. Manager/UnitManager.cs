@@ -15,6 +15,22 @@ public class UnitManager :MonoBehaviour
     private static UnitManager instance;
     public static UnitManager Instance{ get => instance; private set => instance = value;}
 
+    [SerializeField] private RectTransform uiRectTransform; // 배치 영역 UI의 RectTransform
+    public RectTransform UIRectTransform => uiRectTransform;
+
+    private void Start()
+    {
+        if(instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        else
+        {
+            instance = this;
+        }
+        DontDestroyOnLoad(gameObject);
+    }
     private void Awake()
     {
         if(instance != null && instance != this)

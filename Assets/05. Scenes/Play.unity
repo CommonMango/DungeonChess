@@ -111965,6 +111965,10 @@ PrefabInstance:
       propertyPath: Enemy
       value: 
       objectReference: {fileID: 644162927}
+    - target: {fileID: 3026694275508202920, guid: 3da7f63853f96b7429f5fe7561e5cedc, type: 3}
+      propertyPath: uiRectTransform
+      value: 
+      objectReference: {fileID: 493365752}
     - target: {fileID: 3428088301360841644, guid: 3da7f63853f96b7429f5fe7561e5cedc, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

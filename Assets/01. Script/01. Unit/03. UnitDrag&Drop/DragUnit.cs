@@ -14,7 +14,7 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
    
     private Vector3 offset;
     private int currentTileIndex = -1; // 현재 유닛이 위치한 타일의 인덱스
-    [SerializeField] private RectTransform uiRectTransform; // 배치 영역 UI의 RectTransform
+    
 
     public void OnBeginDrag(PointerEventData eventData) //현재 위치 인덱스 저장 후 이동  
     {
@@ -36,12 +36,14 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
     {
         if(!isDraggable) return;
         
-        bool isInUI = RectTransformUtility.RectangleContainsScreenPoint(uiRectTransform, eventData.position, eventData.pressEventCamera);
+        bool isInUI = RectTransformUtility.RectangleContainsScreenPoint(UnitManager.Instance.UIRectTransform, eventData.position, null);
+        Debug.Log($"isInUI: {isInUI}, isDraggable: {isDraggable}, currentTileIndex: {currentTileIndex}");
         if(isInUI) // 배치 UI 안에 들어왔을 때
         {
             // 배치 취소 로직
             Destroy(gameObject); // 유닛 제거
             TileManager.Instance.SetPosCost(currentTileIndex, 0); // 이전 타일의 장애물 비용을 초기화
+            return;
         }
         else if(!TileManager.Instance.CheckInMap(transform.position)) // 맵 밖에 있을 때
         {
@@ -69,6 +71,7 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
                 transform.position = TileManager.Instance.GetTileNodeByIndex(currentTileIndex).pos;
             }
             TileManager.Instance.SetPosCost(currentTileIndex, TileManager.Instance.ObstacleCost); // 현재 타일의 장애물 비용 설정
+            unit.SetCurTile(currentTileIndex); // 유닛의 현재 타일 인덱스 업데이트
         }
     }
     
