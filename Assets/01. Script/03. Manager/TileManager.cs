@@ -169,6 +169,7 @@ public class TileManager : MonoBehaviour
 
     public Vector2 ConvertPositionToCloseNode(Vector2 pos)
     {
+    
         float x = Mathf.Round((pos.x - minX) / tileGap) * tileGap + minX;
         float y = Mathf.Round((pos.y - minY) / tileGap) * tileGap + minY;
         Vector2 CloseNode = new Vector2(x,y);
@@ -232,6 +233,24 @@ public class TileManager : MonoBehaviour
             return false;
         }
         return true;
+    }
+
+    public Vector2 ConvertCanvasPosToWorldPos(Vector2 canvasPos)
+    {
+        Vector3 worldPos = Camera.main.ScreenToWorldPoint(canvasPos);
+        worldPos.z = 0f;
+        Vector2 worldPos2D = new Vector2(worldPos.x, worldPos.y);
+
+        return worldPos2D;
+    }
+
+    public bool IsTileStandable(int index) // index가 정확할떄 
+    {
+        if (standAbleTiles.ContainsKey(index))
+        {
+            return standAbleTiles[index].cost < ObstacleCost;
+        }
+        return false; // 인덱스가 존재하지 않으면 배치 불가
     }
 }
 

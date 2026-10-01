@@ -14,11 +14,11 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
    
     private Vector3 offset;
     private int currentTileIndex = -1; // 현재 유닛이 위치한 타일의 인덱스
+    [SerializeField] private RectTransform uiRectTransform; // 배치 영역 UI의 RectTransform
 
     public void OnBeginDrag(PointerEventData eventData) //현재 위치 인덱스 저장 후 이동  
     {
         if(!isDraggable) return;
-        transform.position = eventData.position;
         currentTileIndex = TileManager.Instance.GetIndexByVector2(transform.position);
         Vector3 tempPos = TileManager.Instance.ConvertCanvasPosToWorldPos(eventData.position);
         offset = transform.position - tempPos;
@@ -35,18 +35,43 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
     public void OnEndDrag(PointerEventData eventData) //드래그 끝나고 배치 될 수 있는 위치면 배치 UI쪽으로 끌어가면 배치 취소 그 이외에는 배치 복귀 
     {
         if(!isDraggable) return;
+        
+        bool isInUI = RectTransformUtility.RectangleContainsScreenPoint(uiRectTransform, eventData.position, eventData.pressEventCamera);
+        if(isInUI) // 배치 UI 안에 들어왔을 때
+        {
+            // 배치 취소 로직
+            Destroy(gameObject); // 유닛 제거
+            TileManager.Instance.SetPosCost(currentTileIndex, 0); // 이전 타일의 장애물 비용을 초기화
+        }
+        else if(!TileManager.Instance.CheckInMap(transform.position)) // 맵 밖에 있을 때
+        {
+            // 배치 불가 피드백 출력
+            Debug.Log("맵 밖에 유닛을 배치할 수 없습니다.");
+            // 원래 위치로 복귀
+            transform.position = TileManager.Instance.GetTileNodeByIndex(currentTileIndex).pos; 
+        }
+        else 
+        {
+            // 배치 가능한 위치인지 확인
+            Vector2 TileVector = TileManager.Instance.ConvertPositionToCloseNode(transform.position);
+            int newTileIndex = TileManager.Instance.GetIndexByVector2(TileVector);
 
-
-
-
+            if (newTileIndex != -1 && TileManager.Instance.IsTileStandable(newTileIndex))
+            {
+                // 배치 가능하면 새로운 위치로 이동
+                TileManager.Instance.SetPosCost(currentTileIndex, 0); // 이전 타일의 장애물 비용 초기화
+                transform.position = TileManager.Instance.GetTileNodeByIndex(newTileIndex).pos;
+                currentTileIndex = newTileIndex; // 현재 타일 인덱스 업데이트
+            }
+            else
+            {
+                // 배치 불가하면 원래 위치로 복귀
+                transform.position = TileManager.Instance.GetTileNodeByIndex(currentTileIndex).pos;
+            }
+            TileManager.Instance.SetPosCost(currentTileIndex, TileManager.Instance.ObstacleCost); // 현재 타일의 장애물 비용 설정
+        }
     }
-    // UI체크 
-    // void OnMouseUp() //마우스를 놓는 순간 스냅될 수 있도록 위치 보정
-    // {
-    //     //새로운 타일 이면 이전 타일 cost 비우고 새 타일 코스트 추가 
-    //     //맵 밖의 타일이면 이전 타일로 복귀
-    //     //유닛 UI쪽으로 끌었다면 배치 취소 후 이전 유닛 삭제 그 후 cost비우기 
-    // }
+    
 
 
     public void InChangeStageState(PhaseState changeState)
