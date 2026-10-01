@@ -13,54 +13,39 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
     }
    
     private Vector3 offset;
+    private int currentTileIndex = -1; // 현재 유닛이 위치한 타일의 인덱스
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnBeginDrag(PointerEventData eventData) //현재 위치 인덱스 저장 후 이동  
     {
         if(!isDraggable) return;
         transform.position = eventData.position;
+        currentTileIndex = TileManager.Instance.GetIndexByVector2(transform.position);
+        Vector3 tempPos = TileManager.Instance.ConvertCanvasPosToWorldPos(eventData.position);
+        offset = transform.position - tempPos;
+        
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if(!isDraggable) return;
-        transform.position = eventData.position;
+        Vector3 tempPos = TileManager.Instance.ConvertCanvasPosToWorldPos(eventData.position);
+        transform.position = tempPos + offset;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnEndDrag(PointerEventData eventData) //드래그 끝나고 배치 될 수 있는 위치면 배치 UI쪽으로 끌어가면 배치 취소 그 이외에는 배치 복귀 
     {
         if(!isDraggable) return;
+
+
+
+
     }
-
-    // void OnMouseDown() //마우스로 클릭한 순간
-    // {
-    //     if (!isDraggable) return;
-
-    //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //     mousePos.z = transform.position.z;
-
-    //     offset = transform.position - mousePos;
-    //     Debug.Log("마우스 클릭");
-    // }
-
-    // void OnMouseDrag() //마우스로 끄는 순간 
-    // {
-    //     if (!isDraggable) return;
-
-    //     Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-    //     mousePos.z = transform.position.z;
-
-    //     transform.position = mousePos + offset;
-
-    //     Debug.Log("마우스 드래그");
-    // }
-
+    // UI체크 
     // void OnMouseUp() //마우스를 놓는 순간 스냅될 수 있도록 위치 보정
     // {
     //     //새로운 타일 이면 이전 타일 cost 비우고 새 타일 코스트 추가 
     //     //맵 밖의 타일이면 이전 타일로 복귀
     //     //유닛 UI쪽으로 끌었다면 배치 취소 후 이전 유닛 삭제 그 후 cost비우기 
-
-        
     // }
 
 
