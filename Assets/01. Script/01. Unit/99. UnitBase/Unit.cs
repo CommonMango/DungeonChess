@@ -21,9 +21,6 @@ public abstract partial class Unit : MonoBehaviour
     //▼ 전투 시작 전달용 변수
     protected bool isBattlePhaseStart;
     public bool IsBattlePhaseStart => isBattlePhaseStart;
-    //▼ SP활성화 여부 전달용 변수
-    protected bool isSPFull;
-    public bool IsSPFull => isSPFull;
     //▼ 현재 위치의 노드인덱스
     protected int curNodeIndex;
     public int NodeIndex => curNodeIndex;
@@ -92,7 +89,11 @@ public abstract partial class Unit : MonoBehaviour
 
         foreach(var col in colliders)
          {
-             distance = (col.transform.position - transform.position).sqrMagnitude;
+             if (col == null) continue;
+             Unit candidate = col.GetComponentInParent<Unit>();
+             if (candidate == null || candidate == this || !candidate.isActiveAndEnabled ||
+                 candidate.HP <= 0 || candidate.unitData.isAlly == unitData.isAlly) continue;
+             distance = (candidate.transform.position - transform.position).sqrMagnitude;
            
             if (distance < minDistance)
            {
@@ -110,54 +111,23 @@ public abstract partial class Unit : MonoBehaviour
     /// <returns></returns>
     public virtual bool DetectTarget()
     {
-        float boxCoor = TileManager.Instance.TileGap * (interactRange * 2 + 1);
-        Vector2 boxSize = new Vector2(boxCoor, boxCoor);
-        
-        while (true)
+        targetUnit = null;
+        isTargetInInteractRange = false;
+        if (isActiveAndEnabled && HP > 0 && isBattlePhaseStart &&
+            PhaseManager.Instance.CurrentState == PhaseState.Battle)
         {
-            colliders = Physics2D.OverlapBoxAll
-            (   
-                transform.position, boxSize, 0, targetLayerMask
-            );
-
-            Collider2D near;
-            
-            if(colliders.Length > 0)
+            float boxCoor = TileManager.Instance.TileGap * (interactRange * 2 + 1);
+            colliders = Physics2D.OverlapBoxAll(transform.position,
+                new Vector2(boxCoor, boxCoor), 0, targetLayerMask);
+            Collider2D near = FindNearestCollider(colliders);
+            if (near != null)
             {
-                near = FindNearestCollider(colliders);
-                
-                targetPosition = near.transform.position;
-
-                if (near != null)
-                {
-                    isTargetInInteractRange = true;
-                    targetPosition = near.transform.position; 
-                    
-                    BTree.SetVariableValue<bool>("IsTargetDetected", isTargetInInteractRange);
-                    return true;
-                } 
-        
-                else
-                {
-                    isTargetInInteractRange = false;
-                    BTree.SetVariableValue<bool>("IsTargetDetected",isTargetInInteractRange);
-                    return false;
-                }
+                targetUnit = near.GetComponentInParent<Unit>();
+                targetPosition = targetUnit.transform.position;
+                isTargetInInteractRange = true;
             }
-            else
-            {
-                isTargetInInteractRange = false;
-                BTree.SetVariableValue<bool>("IsTargetDetected",false);
-                return false;
-            } 
-        }       
-    }    
+        }
+        BTree.SetVariableValue<bool>("IsTargetDetected", isTargetInInteractRange);
+        return isTargetInInteractRange;
+    }
 }
-     
-    
-    
-
-
-
-
-

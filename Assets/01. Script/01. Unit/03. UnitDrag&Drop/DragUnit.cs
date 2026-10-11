@@ -12,14 +12,18 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
         unit = GetComponent<Unit>();
     }
    
+    private void OnEnable() => PhaseManager.Instance.AddSubScriber(this);
+    private void OnDisable() => PhaseManager.Instance.RmvSubScriber(this);
+    private bool isDragging;
     private Vector3 offset;
     private int currentTileIndex = -1; // 현재 유닛이 위치한 타일의 인덱스
     
 
     public void OnBeginDrag(PointerEventData eventData) //현재 위치 인덱스 저장 후 이동  
     {
-        if(!isDraggable) return;
-        currentTileIndex = TileManager.Instance.GetIndexByVector2(transform.position);
+        if(!isDraggable || PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
+        isDragging = true;
+        currentTileIndex = unit.NodeIndex;
         Vector3 tempPos = TileManager.Instance.ConvertCanvasPosToWorldPos(eventData.position);
         offset = transform.position - tempPos;
         
@@ -27,15 +31,17 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
 
     public void OnDrag(PointerEventData eventData)
     {
-        if(!isDraggable) return;
+        if(!isDraggable || PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
         Vector3 tempPos = TileManager.Instance.ConvertCanvasPosToWorldPos(eventData.position);
         transform.position = tempPos + offset;
     }
 
     public void OnEndDrag(PointerEventData eventData) //드래그 끝나고 배치 될 수 있는 위치면 배치 UI쪽으로 끌어가면 배치 취소 그 이외에는 배치 복귀 
     {
-        if(!isDraggable) return;
+        if(!isDraggable || PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
         
+        if (!isDragging) return;
+        isDragging = false;
         bool isInUI = RectTransformUtility.RectangleContainsScreenPoint(UnitManager.Instance.UIRectTransform, eventData.position, null);
         Debug.Log($"isInUI: {isInUI}, isDraggable: {isDraggable}, currentTileIndex: {currentTileIndex}");
         if(isInUI) // 배치 UI 안에 들어왔을 때
@@ -79,6 +85,11 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
 
     public void InChangeStageState(PhaseState changeState)
     {
+        if (changeState != PhaseState.Placement && isDragging)
+        {
+            transform.position = TileManager.Instance.GetTileNodeByIndex(currentTileIndex).pos;
+            isDragging = false;
+        }
         if(changeState == PhaseState.Placement)
             isDraggable = true;
         else

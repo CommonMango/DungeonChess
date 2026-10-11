@@ -17,6 +17,7 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if (PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
         originalParent = transform.parent;
         transform.SetParent(originalParent.root);
 
@@ -27,19 +28,22 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (originalParent == null || PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
         transform.position = eventData.position; 
         
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        if (originalParent == null) return;
         canvasGroup.alpha = 1f; //투명도 원상복귀
         canvasGroup.blocksRaycasts = true; //레이캐스트 원상복귀
         Vector2 worldPos = ConvertCanvasPosToWorldPos(eventData.position);//캔버스 좌표를 월드좌표로 변환
         SpawnUnit(worldPos); //유닛 스폰        
             
         
-        transform.SetParent(originalParent); 
+        transform.SetParent(originalParent);
+        originalParent = null;
 
     }
 
@@ -56,6 +60,7 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     
     private void SpawnUnit(Vector2 pos)
     {
+        if (PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
         if(!TileManager.Instance.CheckInMap(pos)) //맵 밖이면 배치 실패 피드백 출력 
         {
             tmpro.text = "맵 밖에 유닛을 배치할 수 없습니다.";

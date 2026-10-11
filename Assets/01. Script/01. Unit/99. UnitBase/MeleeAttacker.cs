@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class MeleeAttacker : Unit, IObserveStageChange
 {
+    private float nextAttackTime;
     private void OnEnable()
     {
-        PhaseManager.Instance.AddSubScriber(this);
         if(unitData.isAlly)
         {
             UnitManager.Instance.AddAlly(this);
@@ -15,6 +15,7 @@ public class MeleeAttacker : Unit, IObserveStageChange
             UnitManager.Instance.AddEnemy(this);
             
         }
+        PhaseManager.Instance.AddSubScriber(this);
     }
     protected override void Start()
     {
@@ -22,6 +23,7 @@ public class MeleeAttacker : Unit, IObserveStageChange
     }
     void OnDisable()
     {
+        MoveManager.Instance.CancelRequest(this);
         PhaseManager.Instance.RmvSubScriber(this);
          if(unitData.isAlly)
         {
@@ -36,6 +38,7 @@ public class MeleeAttacker : Unit, IObserveStageChange
         if(changeState == PhaseState.Battle)
             {
                 isBattlePhaseStart = true;
+                nextAttackTime = Time.time;
                 BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
                 unitCol.isTrigger = true;
                 SetTarget();
@@ -46,13 +49,25 @@ public class MeleeAttacker : Unit, IObserveStageChange
             isBattlePhaseStart = false;
             BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
             unitCol.isTrigger = false;
-            SetTarget();
+            MoveManager.Instance.CancelRequest(this);
+            // Cancel the pending physics step without snapping back to the previous tile.
+            if (TryGetComponent<Rigidbody2D>(out var rigid))
+            {
+                rigid.MovePosition(rigid.position);
+                rigid.linearVelocity = Vector2.zero;
+            }
         }
+        DetectTarget();
     }
 
     public override void BaseAttack()
     {   
-        //targetUnit
+        if (Time.time < nextAttackTime || !DetectTarget()) return;
+
+        // A zero attack speed in unfinished unit data uses one attack per second.
+        float attacksPerSecond = AttackSpeed > 0f ? AttackSpeed : 1f;
+        nextAttackTime = Time.time + 1f / attacksPerSecond;
+        targetUnit.TakeDamage(Power);
     }
 
      public override void SkillAttack()

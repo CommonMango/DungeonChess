@@ -7,8 +7,7 @@ public enum statType
     HP,
     moveSpeed,
     baseAttackPower,
-    baseAttackSpeed,
-    SP
+    baseAttackSpeed
 }
 
 public abstract partial class Unit
@@ -20,13 +19,6 @@ public abstract partial class Unit
     //▼현재 체력
     private float curHp;
     public float HP => curHp;
-    //최대 SP
-    private float maxSP;
-    //현재 SP
-    private float curSP;
-    public float SP => curSP;
-    //시작 SP
-    private float startSP;
     //▼ 최대 공격력 
     private float maxBaseAttackPower;
     //▼ 현재 공격력 
@@ -55,7 +47,8 @@ public abstract partial class Unit
         maxAttackSpeed = unitData.unitMaxAttackSpeed;
         maxBaseAttackPower = unitData.maxBaseAttackPower;
         maxHp = unitData.unitMaxHp;
-        maxSP = unitData.unitMaxSP;
+        curHp = maxHp;
+        curBaseAttackPower = maxBaseAttackPower;
         name = unitData.unitName;
         cost = unitData.cost;
     }
@@ -107,13 +100,23 @@ public abstract partial class Unit
             case statType.baseAttackSpeed:
                 curAttackSpeed += changeAmount;
                 break;
-            case statType.SP:
-                startSP += changeAmount;
-                break;
             default:
                 Debug.LogError("잘못된 스텟타입");
                 break;
             
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        if (HP <= 0 || !isActiveAndEnabled ||
+            PhaseManager.Instance.CurrentState != PhaseState.Battle || damage <= 0) return;
+
+        curHp = Mathf.Max(0, curHp - damage);
+        if (curHp == 0)
+        {
+            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 
@@ -123,7 +126,6 @@ public abstract partial class Unit
         curBaseAttackPower = maxBaseAttackPower;
         curHp = maxHp;
         curmoveSpeed = maxmoveSpeed;
-        curSP = startSP;
     }
 
 

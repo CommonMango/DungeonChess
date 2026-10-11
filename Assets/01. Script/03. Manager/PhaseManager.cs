@@ -9,12 +9,18 @@ public class PhaseManager : MonoBehaviour
 {
     //▼ 현재 상태
     private PhaseState currentState;
+    public PhaseState CurrentState => currentState;
     
     //▼ 페이즈 변경시 해야할 행동 목록 
     private List<IObserveStageChange> stageStateActions = new List<IObserveStageChange>();  
     
     //▼ 행동들 구독, 구독 취소 메서드
-    public void AddSubScriber (IObserveStageChange subscriber) => stageStateActions.Add(subscriber);
+    public void AddSubScriber (IObserveStageChange subscriber)
+    {
+        if (!stageStateActions.Contains(subscriber))
+            stageStateActions.Add(subscriber);
+        subscriber.InChangeStageState(currentState);
+    }
     public void RmvSubScriber (IObserveStageChange subscriber) => stageStateActions.Remove(subscriber);
 
     private static PhaseManager instance;
@@ -54,12 +60,14 @@ public class PhaseManager : MonoBehaviour
         {
             currentState = toChangePhase;
             notifyChangeState(currentState);
+            if (currentState == PhaseState.Battle)
+                UnitManager.Instance.CheckBattleResult();
         }
     }
 
     private void notifyChangeState(PhaseState notifyState)
     {
-        foreach(var subscriber in stageStateActions)
+        foreach(var subscriber in stageStateActions.ToArray())
         {
             subscriber?.InChangeStageState(notifyState);
         }    
@@ -67,6 +75,7 @@ public class PhaseManager : MonoBehaviour
 
     public void OnButtonClick()
     {
-        ChangeState(PhaseState.Battle);
+        if (currentState == PhaseState.Placement)
+            ChangeState(PhaseState.Battle);
     }
 }

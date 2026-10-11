@@ -53,10 +53,7 @@ public class UnitManager :MonoBehaviour
             TileManager.Instance.SetPosCost(AllyUnits[ally], 0);
             AllyUnits.Remove(ally);
         }
-        if(AllyUnits.Count == 0)
-        {
-            PhaseManager.Instance.ChangeState(PhaseState.Lose);
-        }  
+        CheckBattleResult();
     }    
         
     public void RmvEnemy(Unit enemy) 
@@ -67,12 +64,18 @@ public class UnitManager :MonoBehaviour
             EnemyUnits.Remove(enemy);            
         }
 
-        if(EnemyUnits.Count == 0)
-        {
-            PhaseManager.Instance.ChangeState(PhaseState.Reward);
-        }
+        CheckBattleResult();
     }   
    
+    public void CheckBattleResult()
+    {
+        if (PhaseManager.Instance.CurrentState != PhaseState.Battle) return;
+        if (AllyUnits.Count == 0)
+            PhaseManager.Instance.ChangeState(PhaseState.Lose);
+        else if (EnemyUnits.Count == 0)
+            PhaseManager.Instance.ChangeState(PhaseState.Reward);
+    }
+
     public void AddAlly(Unit ally)
     {
         AllyUnits[ally] = ally.NodeIndex;
@@ -130,7 +133,6 @@ public class UnitManager :MonoBehaviour
        
         if(EnemyUnits.Count == 0 || AllyUnits.Count == 0) //둘 중 하나의 딕셔너리가 비어있으면 
         {
-            Debug.LogError("딕셔너리가 비었습니다.");
             return targetIndex; //0을 반환
         }
         
@@ -157,7 +159,8 @@ public class UnitManager :MonoBehaviour
                 
                 if(minDistance > distance)
                 {
-                    targetIndex = index; 
+                    targetIndex = index;
+                    minDistance = distance;
                 }
             }
         }

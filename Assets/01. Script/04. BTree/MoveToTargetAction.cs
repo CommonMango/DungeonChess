@@ -19,6 +19,9 @@ public partial class MoveToTargetAction : Action
     private bool isMoving;
     protected override Status OnStart()
     {
+        if (meleeAttacker.Value == null || !meleeAttacker.Value.isActiveAndEnabled ||
+            meleeAttacker.Value.HP <= 0 || PhaseManager.Instance.CurrentState != PhaseState.Battle)
+            return Status.Failure;
         curVector = Self.Value.transform.position;
 
         if(!isRequest)
@@ -31,7 +34,10 @@ public partial class MoveToTargetAction : Action
     }
 
     protected override Status OnUpdate()
-    { 
+    {
+        if (meleeAttacker.Value == null || !meleeAttacker.Value.isActiveAndEnabled ||
+            meleeAttacker.Value.HP <= 0 || PhaseManager.Instance.CurrentState != PhaseState.Battle)
+            return Status.Failure;
         if(!meleeAttacker.Value.isMoveReady)
         {
             return Status.Running;
@@ -75,6 +81,9 @@ public partial class MoveToTargetAction : Action
 
     protected override void OnEnd()
     {   
+        if (meleeAttacker.Value != null)
+            MoveManager.Instance.CancelRequest(meleeAttacker.Value);
+        isMoving = false;
         isRequest = false;
     }
 }

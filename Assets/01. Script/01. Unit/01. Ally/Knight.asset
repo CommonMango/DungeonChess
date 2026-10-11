@@ -18,7 +18,6 @@ MonoBehaviour:
   interactRange: 1
   maxBaseAttackPower: 10
   useSkill: []
-  unitMaxSP: 100
   unitMaxAttackSpeed: 5
   isAlly: 1
   cost: 10

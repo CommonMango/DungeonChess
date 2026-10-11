@@ -15,8 +15,6 @@ public class UnitData : ScriptableObject
     [SerializeField] public float maxBaseAttackPower;
     //▼ 사용 가능한 스킬 리스트
     [SerializeField] public Skill[] useSkill;
-    //▼ 최대 SP
-    [SerializeField] public float unitMaxSP;
     //▼ 기본 공격 속도
     [SerializeField] public float unitMaxAttackSpeed;
     //▼ 동료 여부
