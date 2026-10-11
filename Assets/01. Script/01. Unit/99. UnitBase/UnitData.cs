@@ -5,6 +5,8 @@ public class UnitData : ScriptableObject
 {
     //▼ 이름 
     [SerializeField] public string unitName; 
+    [Tooltip("증강 대상 분류. 예: melee, ranged. 대소문자를 구분합니다.")]
+    public string[] augmentTags = new string[0];
     //▼최대 체력
     [SerializeField] public float unitMaxHp;
     //▼ 이동 속도

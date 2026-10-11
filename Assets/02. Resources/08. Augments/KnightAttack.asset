@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 774e9f5d516553444a226aaecfb6f64f, type: 3}
+  m_Name: KnightAttack
+  m_EditorClassIdentifier: Assembly-CSharp::AugmentData
+  augmentId: knight_attack
+  displayName: "\uAE30\uC0AC \uACF5\uACA9\uB825 \uAC15\uD654"
+  description: "\uAE30\uC0AC \uC885\uB958\uC758 \uBAA8\uB4E0 \uC544\uAD70 \uACF5\uACA9\uB825\uC774
+    20% \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  icon: {fileID: 0}
+  targetScope: 1
+  targetUnit: {fileID: 11400000, guid: db762154eb2493e4ba8251593a56d2b8, type: 2}
+  targetTag: 
+  stat: 0
+  operation: 1
+  value: 0.2
+  skillImplementationId: 
+  maxStacks: 1

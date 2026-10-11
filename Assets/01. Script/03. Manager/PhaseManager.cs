@@ -39,7 +39,7 @@ public class PhaseManager : MonoBehaviour
         {
             instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        // Battle managers belong to the battle scene and unload with it.
        
         ChangeState(PhaseState.Placement);
     }

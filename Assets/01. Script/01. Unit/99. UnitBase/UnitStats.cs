@@ -19,21 +19,23 @@ public abstract partial class Unit
     //▼현재 체력
     private float curHp;
     public float HP => curHp;
+    public float MaxHP => maxHp;
+    public float AttackRange => interactRange;
     //▼ 최대 공격력 
     private float maxBaseAttackPower;
     //▼ 현재 공격력 
     private float curBaseAttackPower;
-    public float Power => curBaseAttackPower; 
+    public float Power => AugmentManager.Evaluate(this, AugmentStat.AttackPower, curBaseAttackPower);
     //▼ 최대 이동속도
     private float maxmoveSpeed; 
     //▼ 현재 이동속도
     private float curmoveSpeed; 
-    public float MoveSpeed => curmoveSpeed;
+    public float MoveSpeed => AugmentManager.Evaluate(this, AugmentStat.MoveSpeed, curmoveSpeed);
     //▼ 최대 공격속도
     private float maxAttackSpeed; 
     //▼ 현재 공격속도
     private float curAttackSpeed; 
-    public float AttackSpeed => curAttackSpeed;
+    public float AttackSpeed => AugmentManager.Evaluate(this, AugmentStat.AttackSpeed, curAttackSpeed > 0 ? curAttackSpeed : 1f);
     
     protected virtual void Start() 
     {

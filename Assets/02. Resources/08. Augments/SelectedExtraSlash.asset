@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 774e9f5d516553444a226aaecfb6f64f, type: 3}
+  m_Name: SelectedExtraSlash
+  m_EditorClassIdentifier: Assembly-CSharp::AugmentData
+  augmentId: selected_extra_slash
+  displayName: "\uC120\uD0DD \uC720\uB2DB \uCD94\uAC00 \uBCA0\uAE30"
+  description: "\uC120\uD0DD\uD55C \uC544\uAD70 \uD55C \uBA85\uC758 \uB450\uBC88
+    \uBCA0\uAE30 \uD0C0\uACA9 \uD69F\uC218\uAC00 1\uD68C \uC99D\uAC00\uD569\uB2C8\uB2E4."
+  icon: {fileID: 0}
+  targetScope: 3
+  targetUnit: {fileID: 0}
+  targetTag: 
+  stat: 3
+  operation: 0
+  value: 1
+  skillImplementationId: double_slash
+  maxStacks: 1

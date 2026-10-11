@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61ed9ee6745ef544c878f77e48099023, type: 3}
+  m_Name: DoubleSlash
+  m_EditorClassIdentifier: Assembly-CSharp::DoubleSlashData
+  skillId: double_slash
+  implementationId: double_slash
+  Skillname: "\uB450\uBC88 \uBCA0\uAE30"
+  SkillDescription: "\uC2DC\uC804 \uC2DC \uACF5\uACA9\uB825\uC758 80% \uD53C\uD574\uB85C
+    \uAC19\uC740 \uC801\uC744 0.15\uCD08 \uAC04\uACA9\uC73C\uB85C \uB450 \uBC88 \uBCB1\uB2C8\uB2E4.
+    \uB450 \uD0C0\uACA9\uC774 \uC801\uC911\uD558\uBA74 \uCD1D 160% \uD53C\uD574\uB97C
+    \uC90D\uB2C8\uB2E4."
+  kind: 0
+  icon: {fileID: 0}
+  cooldown: 0
+  skillDamage: 0
+  attackMultiplier: 0.8
+  hitInterval: 0.15

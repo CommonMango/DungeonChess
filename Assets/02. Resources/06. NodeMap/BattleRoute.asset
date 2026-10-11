@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67e69fd2eed7aef46ac1d1f8fa305a23, type: 3}
+  m_Name: BattleRoute
+  m_EditorClassIdentifier: Assembly-CSharp::NodeMapData
+  startNodes:
+  - start
+  nodes:
+  - id: start
+    position: {x: 0, y: -280}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - left1
+    - right1
+  - id: left1
+    position: {x: -230, y: -140}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - left2
+    - center2
+  - id: right1
+    position: {x: 230, y: -140}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - center2
+    - right2
+  - id: left2
+    position: {x: -330, y: 0}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - left3
+  - id: center2
+    position: {x: 0, y: 0}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - left3
+    - right3
+  - id: right2
+    position: {x: 330, y: 0}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - right3
+  - id: left3
+    position: {x: -180, y: 140}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - finish
+  - id: right3
+    position: {x: 180, y: 140}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next:
+    - finish
+  - id: finish
+    position: {x: 0, y: 280}
+    type: {fileID: 11400000, guid: 0d9791ae02fb20d45add3bb076ad7e05, type: 2}
+    next: []

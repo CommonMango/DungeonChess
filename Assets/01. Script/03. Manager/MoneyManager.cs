@@ -22,7 +22,7 @@ public class MoneyManager :MonoBehaviour
         {
             instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        // Battle managers belong to the battle scene and unload with it.
     }
     void OnEnable()
     {

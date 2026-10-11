@@ -29,7 +29,7 @@ public class UnitManager :MonoBehaviour
         {
             instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        // Battle managers belong to the battle scene and unload with it.
     }
     private void Awake()
     {
@@ -42,7 +42,7 @@ public class UnitManager :MonoBehaviour
         {
             instance = this;
         }
-        DontDestroyOnLoad(gameObject);
+        // Battle managers belong to the battle scene and unload with it.
     }
     
     

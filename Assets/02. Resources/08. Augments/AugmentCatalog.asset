@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7304c53d99e20c74f9a20429a160156c, type: 3}
+  m_Name: AugmentCatalog
+  m_EditorClassIdentifier: Assembly-CSharp::AugmentCatalog
+  augments:
+  - {fileID: 11400000, guid: f2fbcf17e09f3524eb3ba9d3a356902d, type: 2}
+  - {fileID: 11400000, guid: b9acddc9ee8d2cd468999be9c6bb8647, type: 2}
