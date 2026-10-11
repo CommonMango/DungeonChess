@@ -509,9 +509,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TileManager
   maxX: 11
-  maxY: 21
+  maxY: 20
   minX: -11
-  minY: -25
+  minY: -26
   startIndex: 1
   tileGap: 2
 --- !u!4 &557328452

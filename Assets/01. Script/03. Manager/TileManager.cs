@@ -21,11 +21,11 @@ public class TileManager : MonoBehaviour
     private Dictionary<int , TileNode> standAbleTiles = new(); //노드인덱스를 키로 노드정보를 가져오는 딕셔너리 
     [SerializeField] int maxX = 11; //x최대 좌표 
     public int MaxX => maxX;
-    [SerializeField] int maxY = 21; //y최대 좌표
+    [SerializeField] int maxY = 20; //y최대 좌표
     public int MaxY => maxY;
     [SerializeField] int minX = -11; //x최소 좌표
     public int MinX => minX;
-    [SerializeField] int minY = -25; //y최소 좌표
+    [SerializeField] int minY = -26; //y최소 좌표
     public int MinY => minY; 
     [SerializeField] int startIndex = 1; // 시작 인덱스 
     [SerializeField] int tileGap = 2; //인접한 타일간 좌표 차이
@@ -244,6 +244,17 @@ public class TileManager : MonoBehaviour
         return worldPos2D;
     }
 
+    // Return the snapped tile even when invalid, so the preview can show red.
+    public bool TryGetPlacementTile(Vector2 position, out int index, int ownTile = 0)
+    {
+        index = 0;
+        if (!CheckInMap(position)) return false;
+        Vector2 snapped = ConvertPositionToCloseNode(position);
+        index = GetIndexByVector2(snapped);
+        if (!standAbleTiles.ContainsKey(index)) { index = 0; return false; }
+        if (snapped.y >= (minY + maxY) * 0.5f) return false;
+        return index == ownTile || IsTileStandable(index);
+    }
     public bool IsTileStandable(int index) // index가 정확할떄 
     {
         if (standAbleTiles.ContainsKey(index))
