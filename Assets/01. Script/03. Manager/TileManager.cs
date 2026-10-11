@@ -25,7 +25,7 @@ public class TileManager : MonoBehaviour
     public int MaxY => maxY;
     [SerializeField] int minX = -11; //x최소 좌표
     public int MinX => minX;
-    [SerializeField] int minY = -26; //y최소 좌표
+    [SerializeField] int minY = -6; //y최소 좌표
     public int MinY => minY; 
     [SerializeField] int startIndex = 1; // 시작 인덱스 
     [SerializeField] int tileGap = 2; //인접한 타일간 좌표 차이
