@@ -21,6 +21,7 @@ public class NodeRunController : MonoBehaviour
 
     private void Start()
     {
+        RunManager.EnsureRun();
         AugmentManager.ClearRun();
         try { map.Validate(); view.Initialize(this); view.Refresh(); }
         catch (Exception ex) { Debug.LogException(ex); enabled = false; }
@@ -79,6 +80,7 @@ public class NodeRunController : MonoBehaviour
     public void ResetRun()
     {
         if (IsBusy) return;
+        RunManager.StartNewRun();
         AugmentManager.ClearRun();
         completed.Clear(); CurrentId = null; PendingId = null;
         IsFailed = false; IsComplete = false; ReturnRequested = false;
