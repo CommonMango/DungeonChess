@@ -1,0 +1,8 @@
+﻿﻿id,assetPath,unitName,unitMaxHp,maxMoveSpeed,interactRange,maxBaseAttackPower,unitMaxAttackSpeed,isAlly,cost,targetLayer,willDamage,isBoss
+string,string,string,float,float,float,float,float,bool,float,int,int,bool
+고유 ID (중복 불가),적용할 SO의 Assets/ 경로,유닛 표시 이름,최대 체력,초당 이동 거리,공격/상호작용 범위,기본 공격 피해량,초당 공격 횟수 (0은 기존 코드에서 1회),아군 true / 적군 false,유닛 비용,공격 대상 레이어 비트 마스크 (레이어 번호 아님),생존 적 의지 피해: 일반 5 / 원거리·마법사 7 / 강한 전열 8 / 엘리트 15,보스 여부: 
+knight,Assets/01. Script/01. Unit/01. Ally/Knight.asset,테스트용아군,100,30,1,10,5,TRUE,10,64,5,FALSE
+knight_mercenary,Assets/01. Script/01. Unit/01. Ally/KnightMercenary.asset,기사,250,30,1,8,0.7,TRUE,10,64,0,FALSE
+archer_mercenary,Assets/01. Script/01. Unit/01. Ally/ArcherMercenary.asset,궁수,100,30,4,15,1,TRUE,10,64,0,FALSE
+wizard_mercenary,Assets/01. Script/01. Unit/01. Ally/WizardMercenary.asset,마법사,70,30,4,30,0.5,TRUE,10,64,0,FALSE
+swordman_mercenary,Assets/01. Script/01. Unit/01. Ally/SwordmanMercenary.asset,검사,160,30,1,18,1.2,TRUE,10,64,0,FALSE

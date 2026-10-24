@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8906f277a93c0a4b9d301c5490ffe91, type: 3}
+  m_Name: ArcherMercenary
+  m_EditorClassIdentifier: Assembly-CSharp::UnitData
+  unitName: "\uAD81\uC218"
+  augmentTags:
+  - ranged
+  unitMaxHp: 100
+  maxMoveSpeed: 30
+  interactRange: 4
+  maxBaseAttackPower: 15
+  useSkill: []
+  unitMaxAttackSpeed: 1
+  willDamage: 0
+  isBoss: 0
+  isAlly: 1
+  cost: 10
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64

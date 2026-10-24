@@ -27,7 +27,7 @@ public class CSVImportWindow : EditorWindow
         rootVisualElement.style.paddingTop = 12;
         rootVisualElement.style.paddingBottom = 12;
         rootVisualElement.Add(new HelpBox("1행 열 이름 · 2행 자료형 · 3행 설명(건너뜀) · 4행부터 데이터\nassetPath에는 적용할 SO 경로를 입력하세요.", HelpBoxMessageType.Info));
-        if (csv == null) csv = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/02. Resources/Resources/Data/Units.csv");
+        if (csv == null) csv = AssetDatabase.LoadAssetAtPath<TextAsset>("Assets/02. Resources/Resources/Data/Ally.csv");
         var file = new ObjectField("CSV 파일") { objectType = typeof(TextAsset), allowSceneObjects = false, value = csv };
         file.RegisterValueChangedCallback(evt => { csv = evt.newValue as TextAsset; Invalidate(); });
         rootVisualElement.Add(file);

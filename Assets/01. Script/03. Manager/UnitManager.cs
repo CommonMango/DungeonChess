@@ -76,6 +76,21 @@ public class UnitManager :MonoBehaviour
             PhaseManager.Instance.ChangeState(PhaseState.Reward);
     }
 
+    // 패배 확정 시 아직 살아 있는 적만 합산합니다. 보스 피해는 별도 규칙 대상입니다.
+    public int CalculateSurvivingEnemyWillDamage()
+    {
+        int total = 0;
+        foreach (var enemy in EnemyUnits.Keys)
+        {
+            if (enemy == null || !enemy.isActiveAndEnabled || enemy.HP <= 0 ||
+                enemy.unitData == null || enemy.unitData.isAlly || enemy.unitData.isBoss) continue;
+            int damage = Mathf.Max(0, enemy.unitData.willDamage);
+            if (damage > int.MaxValue - total) return int.MaxValue;
+            total += damage;
+        }
+        return total;
+    }
+
     public void AddAlly(Unit ally)
     {
         AllyUnits[ally] = ally.NodeIndex;

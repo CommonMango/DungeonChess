@@ -13,12 +13,15 @@ MonoBehaviour:
   m_Name: eyeMonster
   m_EditorClassIdentifier: Assembly-CSharp::UnitData
   unitName: "\uD14C\uC2A4\uD2B8\uC6A9\uC801\uAD70"
+  augmentTags: []
   unitMaxHp: 100
   maxMoveSpeed: 30
   interactRange: 1
   maxBaseAttackPower: 10
   useSkill: []
   unitMaxAttackSpeed: 0
+  willDamage: 5
+  isBoss: 0
   isAlly: 0
   cost: 0
   targetLayer:

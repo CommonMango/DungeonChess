@@ -19,6 +19,10 @@ public class UnitData : ScriptableObject
     [SerializeField] public Skill[] useSkill;
     //▼ 기본 공격 속도
     [SerializeField] public float unitMaxAttackSpeed;
+    [Min(0), Tooltip("패배 시 이 적이 생존해 있으면 받는 의지 피해. 일반 5, 원거리/마법사 7, 강한 전열 8, 엘리트 15.")]
+    public int willDamage = 5;
+    [Tooltip("보스는 일반 생존 적 의지 피해 합산에서 제외합니다. 별도 피해 규칙은 아직 미구현입니다.")]
+    public bool isBoss;
     //▼ 동료 여부
     [SerializeField] public bool isAlly;
     //▼ 아군이라면 비용

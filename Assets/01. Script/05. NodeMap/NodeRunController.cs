@@ -68,7 +68,9 @@ public class NodeRunController : MonoBehaviour
     {
         if (!IsBusy || encounterFinished) return;
         encounterFinished = true;
-        if (success)
+        // 패배해도 의지가 남아 있으면 해당 노드를 지나 다음 경로로 진행합니다.
+        bool canContinue = RunManager.HasRun && !RunManager.Current.IsWillDepleted;
+        if ((success || canContinue) && !(RunManager.HasRun && RunManager.Current.IsWillDepleted))
         {
             completed.Add(PendingId); CurrentId = PendingId;
             IsComplete = map.Find(CurrentId).next.Count == 0;
