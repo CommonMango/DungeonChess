@@ -26,8 +26,8 @@ CSVManager의 CSV Files 배열에 여러 TextAsset을 넣으면 시작할 때 �
 Reload CSV는 Inspector 배열의 표들을 다시 읽습니다. Load로 추가했던 다른 표도 유지합니다.
 
 ```csharp
-var units = CSVManager.Instance.GetTable("Units");
-var knight = units.GetById("knight");
+var units = CSVManager.Instance.GetTable("Ally");
+var knight = units.GetById("knight_mercenary");
 float hp = knight.Get<float>("unitMaxHp"); // 이미 float로 변환된 값 조회
 object typedValue = knight["unitMaxHp"]; // 실제 내용은 float
 
@@ -55,11 +55,11 @@ Unity 프로젝트에서 Domain Reload를 끄면 정적 등록이 유지되므�
 템플릿 예제는 Knight.asset / eyeMonster.asset의 현재 값을 사용합니다.
 SP는 없으며 스킬 Unity 오브젝트 참조는 포함하지 않습니다.
 targetLayer는 레이어 번호가 아닌 비트 마스크입니다.
-CSV의 SO 적용은 아래 에디터 메뉴에서 실행합니다. 런타임 매니저는 CSV 조회를 담당하며 SO를 자동 수정하지 않습니다.
+Ally.csv와 Enemy.csv는 Unity가 변경을 가져오면 에디터에서 SO에 자동 적용합니다. 런타임 매니저는 CSV 조회를 담당합니다.
 Excel에서는 CSV UTF-8(쉼표로 분리)로 저장하세요. 쉼표·줄바꿈이 있는 셀은 따옴표로 감쌉니다.
 
-## Unity에서 SO에 적용하기
-1. Units.csv를 수정하고 CSV UTF-8로 저장합니다.
+## Unity에서 수동으로 SO에 적용하기
+1. 아군은 Ally.csv, 적군은 Enemy.csv를 수정하고 CSV UTF-8로 저장합니다.
 2. 상단 메뉴 **Dungeon Chess > CSV 가져오기**를 엽니다.
 3. CSV 파일을 선택하고 **1. 파싱**을 누릅니다.
 4. 적용 대상과 필드별 이전 값 → 새 값을 확인합니다.
@@ -74,3 +74,18 @@ Excel에서는 CSV UTF-8(쉼표로 분리)로 저장하세요. 쉼표·줄바꿈
 - 새 SO 생성은 하지 않습니다. assetPath의 SO를 먼저 만들어야 합니다.
 - 잘못된 값·필드·경로·중복 대상이 하나라도 있으면 적용하지 않습니다.
 - 파싱 후 CSV나 대상 SO가 바뀌면 다시 파싱해야 합니다. 플레이 중에는 적용할 수 없습니다.
+## 아군 / 적군 데이터
+- Ally.csv: 기존 테스트 아군(knight), 기사 용병(knight_mercenary).
+- Enemy.csv: 테스트 적(eye_monster).
+- Play 씬 CSVManager는 두 파일을 모두 읽습니다.
+- CSV 저장 후 Unity가 변경을 감지하면 전투가 참조하는 기존 SO에 자동 반영됩니다. 수동 파싱 → SO에 적용도 사용할 수 있습니다.
+- willDamage는 생존 적 의지 피해, isBoss는 일반 합산 제외 여부입니다.
+- 1행 필드명, 2행 자료형, 3행 설명(파싱 제외), 4행부터 데이터 형식을 유지합니다.
+
+## CSV 자동 적용
+- 대상은 이 폴더의 Ally.csv와 Enemy.csv 두 파일입니다.
+- 저장 후 Unity의 에셋 가져오기가 완료되면 자동 파싱·검증 후 해당 CSV의 SO를 저장합니다.
+- 3행 설명은 기존과 같이 파싱에서 제외합니다.
+- 해당 CSV에 오류가 있으면 그 파일의 SO를 적용하지 않고 Console에 오류를 표시합니다. 수정 후 다시 저장하면 재시도합니다.
+- Play 중 저장한 변경은 종료 후 적용합니다. Play 전환의 도메인 재로드에도 대기 상태를 유지합니다.
+- Unity Auto Refresh가 꺼져 있다면 Assets > Refresh로 변경을 가져오세요. 에디터에서 자동 적용되며 빌드 실행 중 CSV 수정 기능은 아닙니다.

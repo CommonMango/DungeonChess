@@ -109,12 +109,22 @@ public abstract partial class Unit
         }
     }
 
-    public void TakeDamage(float damage)
+    public void TakeDamage(float damage, Unit basicAttackSource = null)
     {
         if (HP <= 0 || !isActiveAndEnabled ||
             PhaseManager.Instance.CurrentState != PhaseState.Battle || damage <= 0) return;
 
+        float previousHp = curHp;
         curHp = Mathf.Max(0, curHp - damage);
+        if (curHp < previousHp)
+        {
+            // 피해량과 관계없이 실제 피격 한 번당 고정 SP를 얻습니다. 치명타격으로 사망한 유닛은 제외합니다.
+            GainSP(5);
+            // 기본 공격의 실제 적중에만 지급하고, 마지막 적 처치도 전투 종료 통지 전에 반영합니다.
+            if (basicAttackSource != null && basicAttackSource != this &&
+                basicAttackSource.unitData.isAlly != unitData.isAlly)
+                basicAttackSource.GainSP(10);
+        }
         if (curHp == 0)
         {
             gameObject.SetActive(false);

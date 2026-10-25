@@ -37,6 +37,7 @@ public class MeleeAttacker : Unit, IObserveStageChange
     {
         if(changeState == PhaseState.Battle)
             {
+                ResetSP();
                 isBattlePhaseStart = true;
                 nextAttackTime = Time.time;
                 BTree.SetVariableValue<bool>("IsBattlePhase", isBattlePhaseStart);
@@ -67,7 +68,7 @@ public class MeleeAttacker : Unit, IObserveStageChange
         // A zero attack speed in unfinished unit data uses one attack per second.
         float attacksPerSecond = AttackSpeed > 0f ? AttackSpeed : 1f;
         nextAttackTime = Time.time + 1f / attacksPerSecond;
-        targetUnit.TakeDamage(Power);
+        targetUnit.TakeDamage(Power, this);
     }
 
      public override void SkillAttack()

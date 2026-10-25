@@ -9,6 +9,6 @@ public sealed class WizardAttacker : RangedAttacker
     {
         if (Time.time < nextAttackTime || !DetectTarget()) return;
         nextAttackTime = Time.time + 1f / Mathf.Max(0.01f, AttackSpeed);
-        targetUnit.TakeDamage(Power);
+        targetUnit.TakeDamage(Power, this);
     }
 }

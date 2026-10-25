@@ -4,15 +4,17 @@ public sealed class ArrowProjectile : MonoBehaviour
 {
     [SerializeField, Min(0f)] private float hitOffset = 0.5f;
     private Unit target;
+    private Unit source;
     private float damage;
     private float speed;
     private bool sourceIsAlly;
     private float expiresAt;
     private bool initialized;
 
-    public void Initialize(Unit victim, float attackPower, bool ally, float moveSpeed)
+    public void Initialize(Unit victim, float attackPower, bool ally, float moveSpeed, Unit attacker = null)
     {
         target = victim;
+        source = attacker;
         damage = attackPower;
         sourceIsAlly = ally;
         speed = Mathf.Max(0.1f, moveSpeed);
@@ -48,7 +50,7 @@ public sealed class ArrowProjectile : MonoBehaviour
         {
             // 충돌 이벤트 중복 없이 도착한 화살 하나당 한 번만 피해를 줍니다.
             initialized = false;
-            target.TakeDamage(damage);
+            target.TakeDamage(damage, source);
             Destroy(gameObject);
             return;
         }

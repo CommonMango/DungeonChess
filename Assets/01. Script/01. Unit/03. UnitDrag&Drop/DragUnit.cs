@@ -49,6 +49,8 @@ public class DragUnit : MonoBehaviour, IObserveStageChange, IBeginDragHandler, I
             if (PlacementPreview.IsOverUI(eventData.position))
             {
                 FinishDrag();
+                // 재정비에서는 기존 용병의 위치만 바꿀 수 있습니다.
+                if (PhaseManager.Instance.IsReformation) return;
                 gameObject.SetActive(false);
                 Destroy(gameObject);
                 return;

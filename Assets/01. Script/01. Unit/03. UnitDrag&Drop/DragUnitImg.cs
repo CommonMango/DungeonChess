@@ -28,7 +28,7 @@ public class UnitImage : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (originalParent != null || PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
+        if (originalParent != null || PhaseManager.Instance.IsReformation || PhaseManager.Instance.CurrentState != PhaseState.Placement) return;
         originalParent = transform.parent;
         originalPosition = transform.localPosition;
         originalScale = transform.localScale;

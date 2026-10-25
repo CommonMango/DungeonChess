@@ -48,7 +48,7 @@ public class RangedAttacker : MeleeAttacker
         SceneManager.MoveGameObjectToScene(arrow, gameObject.scene);
         var projectile = arrow.GetComponent<ArrowProjectile>();
         if (projectile == null) projectile = arrow.AddComponent<ArrowProjectile>();
-        projectile.Initialize(targetUnit, Power, unitData.isAlly, arrowSpeed);
+        projectile.Initialize(targetUnit, Power, unitData.isAlly, arrowSpeed, this);
     }
 
     public override void SkillAttack() { }

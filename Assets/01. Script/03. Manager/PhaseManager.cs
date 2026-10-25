@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public enum PhaseState
 {
-    Placement, Battle, Reward, Lose
+    Placement, Battle, Reward, Lose, Reforming, DefeatChoice
 }
 
 public class PhaseManager : MonoBehaviour
@@ -10,6 +10,11 @@ public class PhaseManager : MonoBehaviour
     //▼ 현재 상태
     private PhaseState currentState;
     public PhaseState CurrentState => currentState;
+    public int BattleAttempt { get; private set; }
+    public bool IsReformation => BattleAttempt == 1 && currentState == PhaseState.Placement;
+    private BattleReformation reformation;
+    private int firstDefeatDamage;
+    private bool resultResolved;
     
     //▼ 페이즈 변경시 해야할 행동 목록 
     private List<IObserveStageChange> stageStateActions = new List<IObserveStageChange>();  
@@ -39,7 +44,8 @@ public class PhaseManager : MonoBehaviour
         {
             instance = this;
         }
-        // Battle managers belong to the battle scene and unload with it.
+        reformation = gameObject.AddComponent<BattleReformation>();
+        gameObject.AddComponent<BattleRetreatUI>();
        
         ChangeState(PhaseState.Placement);
     }
@@ -56,6 +62,23 @@ public class PhaseManager : MonoBehaviour
 
     public void ChangeState(PhaseState toChangePhase)
     {
+        // 최종 결과가 확정된 전투는 다시 시작할 수 없습니다.
+        if (toChangePhase == PhaseState.Battle)
+        {
+            if (resultResolved || currentState != PhaseState.Placement || BattleAttempt >= 2) return;
+            if (BattleAttempt == 0) reformation.Capture();
+            BattleAttempt++;
+        }
+        // 첫 패배 당시의 생존 적 피해를 보관하고 선택을 기다립니다.
+        if (currentState == PhaseState.Battle && toChangePhase == PhaseState.Lose && BattleAttempt == 1)
+        {
+            firstDefeatDamage = SumEnemyWillDamage();
+            currentState = PhaseState.DefeatChoice;
+            notifyChangeState(currentState);
+
+            return;
+        }
+        if (resultResolved && toChangePhase != PhaseState.Placement) return;
         if(currentState != toChangePhase)
         {
             PhaseState previousState = currentState;
@@ -66,12 +89,46 @@ public class PhaseManager : MonoBehaviour
             if (previousState == PhaseState.Battle && currentState == PhaseState.Lose &&
                 UnitManager.Instance != null)
                 RunManager.EnsureRun().ReduceWill(UnitManager.Instance.CalculateSurvivingEnemyWillDamage());
+            if (currentState == PhaseState.Reward || currentState == PhaseState.Lose) resultResolved = true;
             notifyChangeState(currentState);
             if (currentState == PhaseState.Battle)
                 UnitManager.Instance.CheckBattleResult();
         }
     }
 
+    // 전투 전에는 전체 적, 첫 패배 후에는 그 시점에 보관한 생존 적 피해를 사용합니다.
+    public int RetreatDamage => currentState == PhaseState.DefeatChoice ? firstDefeatDamage :
+        (int)(((long)SumEnemyWillDamage() * 7 + 9) / 10);
+
+    private int SumEnemyWillDamage()
+    {
+        long total = 0;
+        foreach (var unit in FindObjectsByType<Unit>(FindObjectsSortMode.None))
+            if (unit.gameObject.scene == gameObject.scene && unit.isActiveAndEnabled &&
+                unit.HP > 0 && !unit.unitData.isAlly)
+                total += Mathf.Max(0, unit.unitData.willDamage);
+        return (int)System.Math.Min(int.MaxValue, total);
+    }
+
+    public void Retreat()
+    {
+        if (resultResolved || !(currentState == PhaseState.DefeatChoice ||
+            (currentState == PhaseState.Placement && BattleAttempt == 0))) return;
+        int damage = RetreatDamage;
+        // 먼저 종료를 잠가 연속 클릭과 중복 결과 통지를 차단합니다.
+        resultResolved = true;
+        currentState = PhaseState.Lose;
+        RunManager.EnsureRun().ReduceWill(damage);
+        notifyChangeState(currentState);
+    }
+
+    public void ChooseReformation()
+    {
+        if (resultResolved || currentState != PhaseState.DefeatChoice || BattleAttempt != 1) return;
+        currentState = PhaseState.Reforming;
+        notifyChangeState(currentState);
+        StartCoroutine(reformation.Restore(this));
+    }
     private void notifyChangeState(PhaseState notifyState)
     {
         foreach(var subscriber in stageStateActions.ToArray())
